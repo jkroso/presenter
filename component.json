@@ -1,0 +1,18 @@
+{
+  "name": "presenter",
+  "repo": "jkroso/presenter",
+  "description": "A controller-ish class. Helps glue model to interface",
+  "version": "0.1.0",
+  "keywords": ["mvc","view","presenter","controller","dom","mv*"],
+  "dependencies": {
+    "jkroso/classes": "",
+    "jkroso/domify": "",
+    "jkroso/dom-emitter": ""
+  },
+  "main": "src/index.js",
+  "scripts": [
+	  "src/index.js"
+  ],
+  "styles":[],
+  "license": "MIT"
+}

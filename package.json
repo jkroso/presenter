@@ -1,0 +1,34 @@
+{
+  "name": "presenter",
+  "version": "0.1.0",
+  "description": "A controller-ish class. Helps glue model to interface",
+  "main": "src/index.js",
+  "dependencies": {
+    "classes": "git://github.com/jkroso/classes",
+    "domify": "git://github.com/jkroso/domify",
+    "dom-emitter": "git://github.com/jkroso/dom-emitter"
+  },
+  "devDependencies": {
+    "mocha": "*",
+    "chai": "*",
+    "bigfile": "~0.2.3",
+    "sourcegraph": "~0.4.3"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/jkroso/presenter.git"
+  },
+  "bugs": {
+    "url": "https://github.com/jkroso/presenter/issues"
+  },
+  "keywords": [
+    "mvc",
+    "view",
+    "presenter",
+    "controller",
+    "dom",
+    "mv*"
+  ],
+  "author": "Jakeb Rosoman",
+  "license": "MIT"
+}
