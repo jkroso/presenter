@@ -49,7 +49,7 @@ Presenter.prototype.appendChild = function (child) {
   this.lastChild = child
   if (!this.firstChild) this.firstChild = child;
 
-  (this.childViewContainer || this.view).appendChild(child.view)
+  (this._childEl || this.view).appendChild(child.view)
   return this
 }
 
@@ -67,7 +67,7 @@ Presenter.prototype.prependChild = function (child) {
   this.firstChild = child
   if (!this.lastChild) this.lastChild = child
 
-  var view = (this.childViewContainer || this.view)
+  var view = (this._childEl || this.view)
   view.insertBefore(child.view, view.firstChild)
 }
 

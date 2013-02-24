@@ -44,12 +44,12 @@ describe('insertion', function () {
       child.prevSibling.should.equal(b)
     })
 
-    it('should obey `this` presenters `childViewContainer`', function () {
+    it('should obey `this` presenters `_childEl`', function () {
       var child = new Presenter('<a></a>')
       var p = new Presenter('<a><h1></h1></a>')
-      p.childViewContainer = p.view.querySelector('h1')
+      p._childEl = p.view.querySelector('h1')
       p.appendChild(child)
-      p.childViewContainer.lastChild.should.equal(child.view)
+      p._childEl.lastChild.should.equal(child.view)
     })
   })
 
@@ -64,12 +64,12 @@ describe('insertion', function () {
       child.should.have.property('nextSibling', a)
     })
 
-    it('should obey `this` presenters `childViewContainer`', function () {
+    it('should obey `this` presenters `_childEl`', function () {
       var child = new Presenter('<a></a>')
       var p = new Presenter('<a><h1></h1></a>')
-      p.childViewContainer = p.view.querySelector('h1')
+      p._childEl = p.view.querySelector('h1')
       p.appendChild(child)
-      p.childViewContainer.lastChild.should.equal(child.view)
+      p._childEl.lastChild.should.equal(child.view)
     })
   })
 
