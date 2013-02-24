@@ -15,8 +15,7 @@ dist/%.min.js.gz: dist/Laissez-faire.min.js
 	@gzip --best -c dist/Laissez-faire.min.js > $@
 
 dist/%.min.js: dist
-	@$(GRAPH) | $(BIGFILE) \
-		--production > $@
+	@$(GRAPH) | $(BIGFILE) --production > $@
 
 dist/%.js: dist
 	@$(GRAPH) | $(BIGFILE) > $@

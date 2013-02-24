@@ -30,35 +30,36 @@ describe('insertion', function () {
   beforeEach(function () {
     a = new Presenter('<a></a>')
     b = new Presenter('<b></b>')
-    p.appendChild(a)
-    p.appendChild(b)
+    p.children.append(a)
+    p.children.append(b)
   })
-  describe('.appendChild(child)', function () {
+
+  describe('.children.append(child)', function () {
     it('should insert as `lastChild` of `this`', function () {
       var child = new Presenter('<a></a>')
-      p.appendChild(child)
-      p.should.have.property('firstChild', a)
-      p.should.have.property('lastChild', child)
+      p.children.append(child)
+      p.children.should.have.property('first', a)
+      p.children.should.have.property('last', child)
       child.should.have.property('parent', p)
       p.view.lastChild.should.equal(child.view)
       child.prevSibling.should.equal(b)
     })
 
-    it('should obey `this` presenters `_childEl`', function () {
+    it('should insert within `children.el`', function () {
       var child = new Presenter('<a></a>')
       var p = new Presenter('<a><h1></h1></a>')
-      p._childEl = p.view.querySelector('h1')
-      p.appendChild(child)
-      p._childEl.lastChild.should.equal(child.view)
+      p.children.el = p.view.querySelector('h1')
+      p.children.append(child)
+      p.children.el.lastChild.should.equal(child.view)
     })
   })
 
-  describe('.prependChild(child)', function () {
+  describe('.children.prepend(child)', function () {
     it('should insert as `firstChild` of `this`', function () {
       var child = new Presenter('<a></a>')
-      p.prependChild(child)
-      p.should.have.property('firstChild', child)
-      p.should.have.property('lastChild', b)
+      p.children.prepend(child)
+      p.children.should.have.property('first', child)
+      p.children.should.have.property('last', b)
       child.should.have.property('parent', p)
       p.view.firstChild.should.equal(child.view)
       child.should.have.property('nextSibling', a)
@@ -67,9 +68,9 @@ describe('insertion', function () {
     it('should obey `this` presenters `_childEl`', function () {
       var child = new Presenter('<a></a>')
       var p = new Presenter('<a><h1></h1></a>')
-      p._childEl = p.view.querySelector('h1')
-      p.appendChild(child)
-      p._childEl.lastChild.should.equal(child.view)
+      p.children.el = p.view.querySelector('h1')
+      p.children.prepend(child)
+      p.children.el.lastChild.should.equal(child.view)
     })
   })
 
@@ -87,6 +88,7 @@ describe('insertion', function () {
           child.insertAfter(a)
         }
       })
+      
       it('should insert as a sibling of `sib`', function () {
         child.should.have.property('prevSibling', a)
         child.should.have.property('nextSibling', b)
@@ -109,10 +111,10 @@ describe('.children', function () {
     var a = new Presenter('<a></a>')
     var b = new Presenter('<b></b>')
     var c = new Presenter('<c></c>')
-    p.appendChild(a)
-    p.appendChild(b)
-    p.appendChild(c)
-    p.children().should.deep.equal([a,b,c])
+    p.children.append(a)
+    p.children.append(b)
+    p.children.append(c)
+    p.children.toArray().should.deep.equal([a,b,c])
   })
 })
 
@@ -122,9 +124,9 @@ describe('.siblings', function () {
     a = new Presenter('<a></a>')
     b = new Presenter('<b></b>')
     c = new Presenter('<c></c>')
-    p.appendChild(a)
-    p.appendChild(b)
-    p.appendChild(c)
+    p.children.append(a)
+    p.children.append(b)
+    p.children.append(c)
   })
   it('should return a list of `this` presenters siblings', function () {
     b.siblings().should.deep.equal([a,c])
@@ -142,8 +144,8 @@ describe('.remove', function () {
   beforeEach(function () {
     a = new Presenter('<a></a>')
     b = new Presenter('<b></b>')
-    p.appendChild(a)
-    a.appendChild(b)
+    p.children.append(a)
+    a.children.append(b)
     document.body.appendChild(p.view)
   })
 

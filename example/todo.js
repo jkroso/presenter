@@ -19,7 +19,7 @@ Item.prototype.onClick = function (e) {
 
 // insert items
 items.forEach(function (model) {
-  list.appendChild(new Item(model))
+  list.children.append(new Item(model))
 })
 
 document.body.appendChild(list.view)

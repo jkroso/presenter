@@ -1,5 +1,6 @@
 
 var DomEmitter = require('dom-emitter')
+  , ChildList = require('./childlist')
   , classlist = require('classes')
   , domify = require('domify')
 
@@ -25,50 +26,9 @@ function Presenter (view, model) {
   }
   this.view = view
   this.model = model
+  this.children = new ChildList(view, this)
   this.classList = classlist(view)
   this.events = new DomEmitter(view, this)
-}
-
-// default properties
-Presenter.prototype.lastChild = null
-Presenter.prototype.firstChild = null
-Presenter.prototype.parent = null
-
-/**
- * Insert `child` as the `firstChild` of `this`
- *
- * @param {Presenter} child
- * @return {this}
- */
-
-Presenter.prototype.appendChild = function (child) {
-  child.parent = this
-  var last = this.lastChild
-  if (last) last.nextSibling = child
-  child.prevSibling = last
-  this.lastChild = child
-  if (!this.firstChild) this.firstChild = child;
-
-  (this._childEl || this.view).appendChild(child.view)
-  return this
-}
-
-/**
- * Insert `child` as the `lastChild` of `this`
- * 
- * @param {Presenter} child
- */
-
-Presenter.prototype.prependChild = function (child) {
-  child.parent = this
-  var first = this.firstChild
-  if (first) first.prevSibling = child
-  child.nextSibling = first
-  this.firstChild = child
-  if (!this.lastChild) this.lastChild = child
-
-  var view = (this._childEl || this.view)
-  view.insertBefore(child.view, view.firstChild)
 }
 
 /**
@@ -129,22 +89,6 @@ function prevSibs (view) {
   var prev = prevSibs(view.prevSibling)
   prev.push(view)
   return prev
-}
-
-/**
- * Get a list of `this` presenters children
- * 
- * @return {Array}
- */
-
-Presenter.prototype.children = function () {
-  var child = this.firstChild
-  var res = []
-  while (child) {
-    res.push(child)
-    child = child.nextSibling
-  }
-  return res
 }
 
 /**
