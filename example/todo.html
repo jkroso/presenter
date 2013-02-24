@@ -1,0 +1,72 @@
+<!doctype html>
+<html>
+  <head>
+    <style>
+      body {
+        padding: 60px;
+      }
+      #list {
+        border:1px solid #ccc;
+        border-radius: 3px;
+        width: 300px;
+        margin: auto;
+      }
+      #list .item {
+        border-bottom: 1px solid #ccc;
+        padding: 10px;
+      }
+      #list .item.done {
+        text-decoration: line-through;
+      }
+      #list .item:last-of-type {
+        border-bottom: none;
+      }
+    </style>
+  </head>
+  <body>
+    <script src="../../dist/presenter.js"></script>
+    <script>
+      var items = [
+        {
+          title: "see how jQuery does remove()",
+          done: false
+        },
+        {
+          title: "learn SVG",
+          done: false
+        },
+        {
+          title: "come up with a decent plugin system",
+          done: false
+        },
+        {
+          title: "build a better package manager",
+          done: false
+        }
+      ]
+
+      // Todo item container
+      var list = new Presenter('<div id="list"></div>', items)
+
+      // Item class
+      function Item (model) {
+        Presenter.call(this, '<div class="item"></div>')
+        this.view.innerHTML = model.title
+        this.model = model
+        this.events.on('click')
+      }
+
+      Item.prototype.onClick = function (e) {
+        this.classList.toggle('done')
+        this.model.done = !this.model.done
+      }
+
+      // insert items
+      items.forEach(function (model) {
+        list.children.append(new Item(model))
+      })
+
+      document.body.appendChild(list.view)
+    </script>
+  </body>
+</html>

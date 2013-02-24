@@ -5,6 +5,7 @@ var DomEmitter = require('dom-emitter')
   , domify = require('domify')
 
 module.exports = Presenter
+Presenter.ChildList = ChildList
 
 /**
  * Presenter constructor. 
