@@ -27,6 +27,7 @@ function Presenter (view, model) {
   }
   this.view = view
   this.model = model
+  this.kids =
   this.children = new ChildList(view, this)
   this.classList = classlist(view)
   this.events = new DomEmitter(view, this)
