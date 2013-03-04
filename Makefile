@@ -16,9 +16,9 @@ clean:
 test/built.js: src/* test/*
 	@node_modules/.bin/sourcegraph.js test/browser.js \
 		--plugins mocha,nodeish,javascript \
-		| node_modules/.bin/bigfile \
+		| node_modules/.bin/bigfile.js \
 		 	--export null \
-		 	--plugins nodeish > $@
+		 	--plugins nodeish,javascript > $@
 
 Readme.md: src/* docs/*
 	@cat docs/head.md > $@
