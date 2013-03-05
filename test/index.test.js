@@ -224,4 +224,11 @@ describe('navigation', function () {
 			p.down('b').should.equal(b1)
 		})
 	})
+
+	describe('.downLast(<string>)', function () {
+		it('should select the last matching child', function () {
+			p.downLast('b').should.equal(b2)
+			p.downLast('a').should.equal(a2)
+		})
+	})
 })

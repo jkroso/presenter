@@ -142,3 +142,26 @@ Presenter.prototype.down = function(sel){
     childs.push(child)
   }
 }
+
+/**
+ * Works like `.down` except later siblings are prefered
+ *
+ * @param {String} sel
+ * @return {Presenter}
+ */
+
+Presenter.prototype.downLast = function(sel){
+  var childs = this.children.toArray().reverse()
+  for (var i = 0; i < childs.length; i++) {
+    var child = childs[i]
+    if (matches(child.view, sel)) return child
+    reversePush(child.children.last)
+  }
+
+  function reversePush(child){
+    while (child) {
+      childs.push(child)
+      child = child.prevSibling
+    }
+  }
+}
