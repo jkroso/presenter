@@ -12,10 +12,11 @@
     "mv*"
   ],
   "dependencies": {
-    "component/classes": "",
-    "jkroso/domify": "",
-    "jkroso/dom-emitter": "",
-    "jkroso/graph": "*"
+    "component/classes": "*",
+    "jkroso/domify": "*",
+    "jkroso/dom-emitter": "*",
+    "jkroso/graph": "*",
+    "jkroso/action": "*"
   },
   "main": "src/index.js",
   "scripts": [

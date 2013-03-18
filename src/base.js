@@ -1,6 +1,7 @@
 
 var DomEmitter = require('dom-emitter')
   , ChildList = require('./childlist')
+  , Action = require('action').Action
   , classlist = require('classes')
   , domify = require('domify')
   , matches = require('matches-selector')
@@ -23,6 +24,33 @@ function Presenter (view) {
   this.children = new ChildList(view, this)
   this.classList = classlist(view)
   this.events = new DomEmitter(view, this)
+}
+
+/**
+ * hook an action to a DOM event. If you omit `trigger`
+ * `fn.name` will be used as the DOM event hook
+ *
+ *   pres.action(function click(e, subj){
+ *     // e == DOM event
+ *     // subj == Presenter
+ *     // this == Action
+ *   })
+ *   // equivalent to
+ *   pres.action('click', function(e, subj){})
+ *
+ * @param {String} [trigger] DOM hook
+ * @param {Function} fn
+ * @return {Action}
+ */
+
+Presenter.prototype.action = function(trigger, fn){
+  if (!fn) fn = trigger, trigger = fn.name
+  var action = new Action(fn)
+  action.subj = this
+  this.events.on(trigger, function(e){
+    action.send(e, this)
+  })
+  return action
 }
 
 /**
