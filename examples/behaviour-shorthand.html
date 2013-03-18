@@ -1,0 +1,46 @@
+<!doctype html>
+<html>
+<head>
+<style>
+  body {
+    padding: 60px;
+  }
+  .fish {
+    width:50px;
+    height: 30px;
+    border-radius: 50%;
+    background: #bada33;
+    position: absolute;
+  }
+  .fish:before {
+    content: '';
+    border:15px solid #bada33;
+    border-top-color: transparent;
+    border-bottom-color: transparent;
+    border-left-color: transparent;
+    position: absolute;
+    right: -15px;
+    top:0px;
+  }
+</style>
+</head>
+<body>
+<script src="../dist/presenter.js"></script>
+<script>
+  var Fish = presenter('<div class="fish"></div>')
+    .behave(function click(e){
+      var el = this.view
+      el.style.width = el.offsetWidth + 1 + 'px'
+      el.style.height = el.offsetHeight + 1 + 'px'
+      this.events.emit('mousemove', e)
+    })
+    .behave(function mousemove(e){
+      var el = this.view
+      el.style.top = e.clientY - el.offsetHeight / 2 + 'px'
+      el.style.left = e.clientX - el.offsetWidth / 2 + 'px'
+    })
+
+  document.body.appendChild(new Fish().view)
+</script>
+</body>
+</html>

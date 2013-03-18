@@ -1,0 +1,54 @@
+<!doctype html>
+<html>
+<head>
+<style>
+	body {
+		padding: 60px;
+	}
+	.counter {
+		padding: 15px;
+		border-radius: 5px;
+		background: blue;
+		margin:50px auto;
+		font: 5em Arial, sans-serif;
+	}
+</style>
+</head>
+<body>
+<script src="../dist/presenter.js"></script>
+<script>
+	var Counter = presenter('<div tabIndex="1" class="counter">1</div>')
+
+	Counter.prototype.init = function(){
+		setTimeout(function () {
+			this.view.focus()
+		}.bind(this), 0)
+	}
+
+	Counter.behaviour.push({
+		trigger: 'keydown',
+		action: {
+			value: function(e){
+				var val = e.target.innerText
+				return parseFloat(val, 10) || 0
+			},
+			inc: function(value, e){
+				return value + (e.which == 38 ? 1 : -1)
+			},
+			bang: function(inc){
+				var str = ''
+				while (inc-- > 0) {
+					str += '!'
+				}
+				return str
+			},
+			display: function(inc, bang, e){
+				e.target.innerHTML = inc + bang
+			}
+		}
+	})
+
+	document.body.appendChild(new Counter().view)
+</script>
+</body>
+</html>
