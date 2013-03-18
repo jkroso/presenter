@@ -3,7 +3,9 @@ GRAPH = node_modules/.bin/sourcegraph.js src/index.js -p javascript,nodeish
 BIGFILE = node_modules/.bin/bigfile.js -p nodeish,javascript -x $(EXPORT)
 REPORTER=spec
 
-all: test/built.js dist/presenter.js
+all: test/built.js browser
+
+browser: dist/presenter.js
 
 dist/%.js: src/*
 	@mkdir -p dist

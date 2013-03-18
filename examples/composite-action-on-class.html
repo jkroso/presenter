@@ -1,0 +1,57 @@
+<!doctype html>
+<html>
+<head>
+<style>
+  body {
+    padding: 60px;
+  }
+  .car {
+    width:50px;
+    height: 30px;
+    top:100px;
+    left:100px;
+    border-radius: 5px;
+    background: blue;
+    position: absolute;
+    outline: none;
+  }
+</style>
+</head>
+<body>
+<script src="../dist/presenter.js"></script>
+<script>
+  var Car = presenter('<div tabIndex="1" class="car"></div>')
+  
+  var arrows = {
+    37: 'left',
+    38: 'up',
+    39: 'right',
+    40: 'down'
+  }
+
+  Car.action(function keydown(e){
+      this.dispatch(arrows[e.which], this.subj)
+    })
+    .when(function down(subj){
+      var el = subj.view
+      el.style.top = el.offsetTop + 15 + 'px'
+    })
+    .when(function up(subj){
+      var el = subj.view
+      el.style.top = el.offsetTop - 15 + 'px'
+    })
+    .when(function right(subj){
+      var el = subj.view
+      el.style.left = el.offsetLeft + 15 + 'px'
+    })
+    .when(function left(subj){
+      var el = subj.view
+      el.style.left = el.offsetLeft - 15 + 'px'
+    })
+
+  var car = new Car
+  document.body.appendChild(car.view)
+  car.view.focus()
+</script>
+</body>
+</html>
