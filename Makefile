@@ -1,11 +1,11 @@
-EXPORT=Presenter
+EXPORT=presenter
 GRAPH = node_modules/.bin/sourcegraph.js src/index.js -p javascript,nodeish
-BIGFILE = node_modules/.bin/bigfile -p nodeish -x $(EXPORT)
+BIGFILE = node_modules/.bin/bigfile.js -p nodeish,javascript -x $(EXPORT)
 REPORTER=spec
 
-all: test/built.js Readme.md
+all: test/built.js dist/presenter.js
 
-dist/%.js:
+dist/%.js: src/*
 	@mkdir -p dist
 	@$(GRAPH) | $(BIGFILE) > $@
 
@@ -15,16 +15,9 @@ clean:
 
 test/built.js: src/* test/*
 	@node_modules/.bin/sourcegraph.js test/browser.js \
-		--plugins mocha,nodeish,javascript \
+		-p mocha,nodeish,javascript \
 		| node_modules/.bin/bigfile.js \
-		 	--export null \
-		 	--plugins nodeish,javascript > $@
+			-x null \
+			-p nodeish,javascript > $@
 
-Readme.md: src/* docs/*
-	@cat docs/head.md > $@
-	@cat src/index.js \
-	 | sed s/.*=.$$// \
-	 | dox -a >> $@
-	@cat docs/tail.md >> $@
-
-.PHONY: all test clean browser
+.PHONY: all clean
