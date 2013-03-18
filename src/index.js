@@ -37,7 +37,7 @@ function makePresenter(name, template){
 		) + '\n' +
 		'  installBehaviour(this, '+name+'.behaviour)\n' +
 		'  installActions(this, '+name+'.actions)\n' +
-		'  if (typeof this.init == "function") this.init(model)\n' +
+		'  \'init\' in this && this.init.apply(this, arguments)\n' +
 		'})'
 	)
 
