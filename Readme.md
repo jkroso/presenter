@@ -1,6 +1,8 @@
-# presenter
+# presenter 
 
-A controller-ish class. Helps glue model to interface. Currently in the very early stages of conception.
+(work in progress)
+
+A controller-ish class. Helps glue model to interface.
 
 ## Getting Started
 
@@ -12,11 +14,14 @@ _With npm_
 
 	$ npm install jkroso/presenter --save
 
-## API
+then in your app:
 
 ```javascript
-var Presenter = require('presenter')
+var presenter = require('presenter')
 ```
+
+## API
+
   - [Presenter()](#presenter)
   - [Presenter.appendChild()](#presenterappendchildchildpresenter)
   - [Presenter.prependChild()](#presenterprependchildchildpresenter)
@@ -61,6 +66,10 @@ var Presenter = require('presenter')
 ### Presenter.remove()
 
   Remove a view from the DOM
+
+## Stability
+
+Experimental: Expect the unexpected. Please provide feedback on api and your use-case.
 
 ## Running the tests
 
