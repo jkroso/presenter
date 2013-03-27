@@ -5,6 +5,7 @@ var DomEmitter = require('dom-emitter')
   , classlist = require('classes')
   , domify = require('domify')
   , matches = require('matches-selector')
+  , each = require('foreach')
 
 module.exports = Presenter
 
@@ -22,12 +23,13 @@ function Presenter (view) {
   this.view = view
   this.kids =
   this.children = new ChildList(view, this)
+  this.classes = 
   this.classList = classlist(view)
   this.events = new DomEmitter(view, this)
 }
 
 /**
- * hook an action to a DOM event. If you omit `trigger`
+ * hook an action to a DOM event. If you omit `hook`
  * `fn.name` will be used as the DOM event hook
  *
  *   pres.action(function click(e, subj){
@@ -38,19 +40,38 @@ function Presenter (view) {
  *   // equivalent to
  *   pres.action('click', function(e, subj){})
  *
- * @param {String} [trigger] DOM hook
- * @param {Function} fn
+ * @param {String} [hook]
+ * @param {Function|Action} act
  * @return {Action}
  */
 
-Presenter.prototype.action = function(trigger, fn){
-  if (!fn) fn = trigger, trigger = fn.name
-  var action = new Action(fn)
-  action.subj = this
-  this.events.on(trigger, function(e){
-    action.send(e, this)
-  })
-  return action
+Presenter.prototype.action = function(hook, act){
+  if (typeof hook == 'string') hook = [hook]
+  else if (typeof hook == 'function') {
+    act = hook
+    hook = [act.name]
+  } else {
+    act = hook
+    hook = hook.hook
+  }
+  
+  if (typeof act == 'function') act = new Action(act)
+  act.subject = this
+
+  if (hook instanceof Array) {
+    var dispatch = function(e){ act.send(e, this) }
+    each(hook, function(hook){
+      var fn = dispatch
+      if (typeof hook == 'function') fn = hook, hook = fn.name
+      this.events.on(hook, fn)
+    }, this)
+  } else {
+    each(hook, function(fn, k){
+      this.events.on(k, fn)
+    }, this)
+  }
+  
+  return act
 }
 
 /**
