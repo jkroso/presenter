@@ -13,13 +13,14 @@
     border-radius: 5px;
     background: blue;
     position: absolute;
-}
+    outline: none;
   }
 </style>
 </head>
 <body>
 <script src="../dist/presenter.js"></script>
 <script>
+  var presenter = require('/src')
   var car = new presenter.Base('<div tabIndex="1" class="car"></div>')
 
   var arrows = {
@@ -30,21 +31,21 @@
   }
 
   car.action(function keydown(e){
-      this.dispatch(arrows[e.which], this.subj)
+      this.dispatch(arrows[e.which], this.subject)
     })
-    .when(function down(subj){
+    .on(function down(subj){
       var el = subj.view
       el.style.top = el.offsetTop + 15 + 'px'
     })
-    .when(function up(subj){
+    .on(function up(subj){
       var el = subj.view
       el.style.top = el.offsetTop - 15 + 'px'
     })
-    .when(function right(subj){
+    .on(function right(subj){
       var el = subj.view
       el.style.left = el.offsetLeft + 15 + 'px'
     })
-    .when(function left(subj){
+    .on(function left(subj){
       var el = subj.view
       el.style.left = el.offsetLeft - 15 + 'px'
     })

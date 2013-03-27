@@ -21,8 +21,9 @@
 <script src="../dist/presenter.js"></script>
 <script>
   var presenter = require('/src')
-  var Car = presenter('<div tabIndex="1" class="car"></div>')
-  
+  var action = require('action')
+  var car = new presenter.Base('<div tabIndex="1" class="car"></div>')
+
   var arrows = {
     37: 'left',
     38: 'up',
@@ -30,10 +31,17 @@
     40: 'down'
   }
 
-  Car.action(function keydown(e){
-      this.dispatch(arrows[e.which], this.subject)
-    })
-    .on(function down(subj){
+  var dispatch = action(function(e, subject){
+    this.dispatch(arrows[e.which], subject)
+  })
+
+  dispatch.hooks = {
+    keydown: function(e){
+      dispatch.send(e, this)
+    }
+  }
+
+  dispatch.on(function down(subj){
       var el = subj.view
       el.style.top = el.offsetTop + 15 + 'px'
     })
@@ -50,7 +58,7 @@
       el.style.left = el.offsetLeft - 15 + 'px'
     })
 
-  var car = new Car
+  car.action(dispatch)
   document.body.appendChild(car.view)
   car.view.focus()
 </script>

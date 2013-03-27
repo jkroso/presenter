@@ -1,4 +1,4 @@
-EXPORT=presenter
+EXPORT=require
 GRAPH = node_modules/.bin/sourcegraph.js src/index.js -p javascript,nodeish
 BIGFILE = node_modules/.bin/bigfile.js -p nodeish,javascript -x $(EXPORT)
 REPORTER=spec

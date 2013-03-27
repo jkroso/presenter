@@ -17,6 +17,7 @@
 <body>
 <script src="../dist/presenter.js"></script>
 <script>
+	var presenter = require('/src')
 	var Counter = presenter('<div tabIndex="1" class="counter">1</div>')
 
 	Counter.prototype.init = function(){

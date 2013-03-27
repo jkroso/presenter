@@ -27,6 +27,7 @@
 <body>
 <script src="../dist/presenter.js"></script>
 <script>
+  var presenter = require('/src')
   var Fish = presenter('<div class="fish"></div>')
     .behave(function click(e){
       var el = this.view
