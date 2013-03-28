@@ -1,7 +1,9 @@
 
 var Base = require('./base')
   , ChildList = require('./childlist')
-  , Action = require('action').Action
+  , action = require('action')
+  , toAction = action.force
+  , Action = action.Action
   , graph = require('graph')
 
 module.exports = makePresenter
@@ -63,7 +65,9 @@ function installBehaviour(self, behaviour){
 function installActions(self, actions){
 	for (var i = 0, len = actions.length; i < len; i++) {
 		var act = actions[i]
-		var action = self.action(act.trigger, act.action)
+		var action = new Action(act.send)
+		action.hooks = act.hooks
+		self.action(action)
 		connectPins(action, act.pins)
 	}
 }
@@ -77,13 +81,16 @@ function connectPins(action, pins){
 	}
 }
 
-function addAction(trigger, action){
-	if (typeof trigger == 'function') {
-		action = trigger
-		trigger = trigger.name
+function addAction(hook, action){
+	if (typeof hook != 'string') {
+		action = hook
+		hook = action.hooks || action.name
 	}
-	var action = new Action(action)
-	action.trigger = trigger
+
+	var action = toAction(action)
+	action.hooks = typeof hook == 'string'
+		? [hook]
+		: hook
 	this.actions.push(action)
 	return action
 }

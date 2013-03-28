@@ -52,7 +52,7 @@ Presenter.prototype.action = function(hook, act){
     hook = [act.name]
   } else {
     act = hook
-    hook = hook.hook
+    hook = hook.hooks
   }
   
   if (typeof act == 'function') act = new Action(act)
