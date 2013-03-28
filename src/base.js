@@ -1,11 +1,11 @@
 
 var DomEmitter = require('dom-emitter')
-  , ChildList = require('./childlist')
-  , Action = require('action').Action
-  , classlist = require('classes')
-  , domify = require('domify')
-  , matches = require('matches-selector')
-  , each = require('foreach')
+	, ChildList = require('./childlist')
+	, Action = require('action').Action
+	, classlist = require('classes')
+	, domify = require('domify')
+	, matches = require('matches-selector')
+	, event = require('event')
 
 module.exports = Presenter
 
@@ -18,24 +18,23 @@ module.exports = Presenter
  * @param {String|Element} view
  */
 
-function Presenter (view) {
-  if (typeof view == 'string') view = domify(view)
-  this.view = view
-  this.kids =
-  this.children = new ChildList(view, this)
-  this.classes = 
-  this.classList = classlist(view)
-  this.events = new DomEmitter(view, this)
+function Presenter(view){
+	if (typeof view == 'string') view = domify(view)
+	this.view = view
+	this.kids =
+	this.children = new ChildList(view, this)
+	this.classes = 
+	this.classList = classlist(view)
+	this.events = new DomEmitter(view, this)
+	this.actions = {}
 }
 
 /**
  * hook an action to a DOM event. If you omit `hook`
  * `fn.name` will be used as the DOM event hook
  *
- *   pres.action(function click(e, subj){
- *     // e == DOM event
- *     // subj == Presenter
- *     // this == Action
+ *   pres.action(function click(domEvent, presenter){
+ *     // this === Action
  *   })
  *   // equivalent to
  *   pres.action('click', function(e, subj){})
@@ -46,42 +45,35 @@ function Presenter (view) {
  */
 
 Presenter.prototype.action = function(hook, act){
-  if (typeof hook == 'string') hook = [hook]
-  else if (typeof hook == 'function') {
-    act = hook
-    hook = [act.name]
-  } else {
-    act = hook
-    hook = hook.hooks
-  }
-  
-  if (typeof act == 'function') act = new Action(act)
-  act.subject = this
-  if (typeof hook != 'object') hookError()
-  function dispatch(e){ act.send(e, this) }
-  
-  if (hook instanceof Array) {
-    var k = hook.length
-    if (!k) hookError()
-    while (k--) {
-      var fn = dispatch
-      var event = hook[k]
-      if (typeof event == 'function') fn = event, event = fn.name
-      this.events.on(event, fn)
-    }
-  } else {
-    for (var k in hook) {
-      var fn = hook[k]
-      this.events.on(k, typeof fn == 'function' ? fn : dispatch)
-    }
-  }
-  
-  return act
-  
+	if (!act) act = hook, hook = act.name
+	if (typeof act == 'function') act = new Action(act)
+	var dispatch = this.actions[hook]
+	if (dispatch) dispatch.out = dispatch.out.concat(act)
+	else {
+		var self = this
+		dispatch = function multi(e){
+			var out = multi.out
+			for (var i = 0, len = out.length; i < len; i++) {
+				out[i].send(e, self, this)
+			}
+		}
+		dispatch.out = [act]
+		this.actions[hook] = dispatch
+		event.bind(this.view, hook, dispatch)
+	}
+	
+	return act 
 }
 
-function hookError(){
-  throw new TypeError('unable to determine a DOM event hook')
+/**
+ * use a plugin
+ *
+ * @param {Function} plugin
+ * @return {Any} plugin.return
+ */
+
+Presenter.prototype.use = function(plugin){
+	return plugin(this)
 }
 
 /**
@@ -90,15 +82,15 @@ function hookError(){
  * @param {Presenter} sib
  */
 
-Presenter.prototype.insertBefore = function (sib) {
-  this.parent = sib.parent
-  var prev = sib.prevSibling
-  if (prev) prev.nextSibling = this
-  sib.prevSibling = this
-  this.nextSibling = sib
-  this.prevSibling = prev
+Presenter.prototype.insertBefore = function(sib){
+	this.parent = sib.parent
+	var prev = sib.prevSibling
+	if (prev) prev.nextSibling = this
+	sib.prevSibling = this
+	this.nextSibling = sib
+	this.prevSibling = prev
 
-  sib.view.parentNode.insertBefore(this.view, sib.view)
+	sib.view.parentNode.insertBefore(this.view, sib.view)
 }
 
 /**
@@ -107,16 +99,16 @@ Presenter.prototype.insertBefore = function (sib) {
  * @param {Presenter} sib
  */
 
-Presenter.prototype.insertAfter = function (sib) {
-  this.parent = sib.parent
+Presenter.prototype.insertAfter = function(sib){
+	this.parent = sib.parent
 
-  var next = sib.nextSibling
-  this.nextSibling = next
-  if (next) next.prevSibling = this
-  sib.nextSibling = this
-  this.prevSibling = sib
+	var next = sib.nextSibling
+	this.nextSibling = next
+	if (next) next.prevSibling = this
+	sib.nextSibling = this
+	this.prevSibling = sib
 
-  sib.view.parentNode.insertBefore(this.view, sib.view.nextSibling)
+	sib.view.parentNode.insertBefore(this.view, sib.view.nextSibling)
 }
 
 /**
@@ -126,22 +118,22 @@ Presenter.prototype.insertAfter = function (sib) {
  * @return {Array}
  */
 
-Presenter.prototype.siblings = function (inc) {
-  var sibs = prevSibs(this.prevSibling)
-  inc && sibs.push(this)
-  var sib = this.nextSibling
-  while (sib) {
-    sibs.push(sib)
-    sib = sib.nextSibling
-  }
-  return sibs
+Presenter.prototype.siblings = function(inc){
+	var sibs = prevSibs(this.prevSibling)
+	inc && sibs.push(this)
+	var sib = this.nextSibling
+	while (sib) {
+		sibs.push(sib)
+		sib = sib.nextSibling
+	}
+	return sibs
 }
 
 function prevSibs (view) {
-  if (!view) return []
-  var prev = prevSibs(view.prevSibling)
-  prev.push(view)
-  return prev
+	if (!view) return []
+	var prev = prevSibs(view.prevSibling)
+	prev.push(view)
+	return prev
 }
 
 /**
@@ -150,12 +142,12 @@ function prevSibs (view) {
  * @emits "remove"
  */
  
-Presenter.prototype.remove = function () {
-  var parent = this.view.parentNode
-  if (parent) {
-    this.events.emit('remove')
-    parent.removeChild(this.view)
-  }
+Presenter.prototype.remove = function(){
+	var parent = this.view.parentNode
+	if (parent) {
+		this.events.emit('remove')
+		parent.removeChild(this.view)
+	}
 }
 
 /**
@@ -166,10 +158,10 @@ Presenter.prototype.remove = function () {
  */
 
 Presenter.prototype.up = function(sel){
-  var parent = this
-  while (parent = parent.parent) {
-    if (matches(parent.view, sel)) return parent
-  }
+	var parent = this
+	while (parent = parent.parent) {
+		if (matches(parent.view, sel)) return parent
+	}
 }
 
 /**
@@ -181,16 +173,16 @@ Presenter.prototype.up = function(sel){
  */
 
 Presenter.prototype.down = function(sel){
-  var childs = this.children.toArray()
-  for (var i = 0; i < childs.length; i++) {
-    var child = childs[i]
-    if (matches(child.view, sel)) return child
-    child.children.each(push)
-  }
+	var childs = this.children.toArray()
+	for (var i = 0; i < childs.length; i++) {
+		var child = childs[i]
+		if (matches(child.view, sel)) return child
+		child.children.each(push)
+	}
 
-  function push(child){
-    childs.push(child)
-  }
+	function push(child){
+		childs.push(child)
+	}
 }
 
 /**
@@ -201,17 +193,17 @@ Presenter.prototype.down = function(sel){
  */
 
 Presenter.prototype.downLast = function(sel){
-  var childs = this.children.toArray().reverse()
-  for (var i = 0; i < childs.length; i++) {
-    var child = childs[i]
-    if (matches(child.view, sel)) return child
-    reversePush(child.children.last)
-  }
+	var childs = this.children.toArray().reverse()
+	for (var i = 0; i < childs.length; i++) {
+		var child = childs[i]
+		if (matches(child.view, sel)) return child
+		reversePush(child.children.last)
+	}
 
-  function reversePush(child){
-    while (child) {
-      childs.push(child)
-      child = child.prevSibling
-    }
-  }
+	function reversePush(child){
+		while (child) {
+			childs.push(child)
+			child = child.prevSibling
+		}
+	}
 }

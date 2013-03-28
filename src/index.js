@@ -1,9 +1,7 @@
 
 var Base = require('./base')
   , ChildList = require('./childlist')
-  , action = require('action')
-  , toAction = action.force
-  , Action = action.Action
+  , Action = require('action').Action
   , graph = require('graph')
 
 module.exports = makePresenter
@@ -44,7 +42,7 @@ function makePresenter(name, template){
 	)
 
 	Pres.behaviour = []
-	Pres.actions = []
+	Pres.actions = {}
 	Pres.behave = addBehaviour
 	Pres.action = addAction
 
@@ -54,46 +52,28 @@ function makePresenter(name, template){
 	return Pres
 }
 
-function installBehaviour(self, behaviour){
-	for (var i = 0, len = behaviour.length; i < len; i++) {
-		var b = behaviour[i]
-		if (typeof b.action == "object") b.action = graph(b.action)
-		self.events.on(b.trigger, b.action)
-	}
+function addAction(hook, action){
+	if (!action) action = hook, hook = action.name
+	if (typeof action == 'function') action = new Action(action);
+	(this.actions[hook] || (this.actions[hook] = [])).push(action)
+	return action
 }
 
 function installActions(self, actions){
-	for (var i = 0, len = actions.length; i < len; i++) {
-		var act = actions[i]
-		var action = new Action(act.send)
-		action.hooks = act.hooks
-		self.action(action)
-		connectPins(action, act.pins)
+	for (var hook in actions) {
+		var acts = actions[hook]
+		acts.forEach(function(action){
+			connectPins(self.action(hook, action.send), action.pins)
+		})
 	}
 }
 
 function connectPins(action, pins){
 	for (var pin in pins) {
 		pins[pin].forEach(function(child){
-			child = action.connect(pin, child.send)
-			connectPins(child, child.pins)
+			connectPins(action.connect(pin, child.send), child.pins)
 		})
 	}
-}
-
-function addAction(hook, action){
-	if (typeof hook != 'string') {
-		action = hook
-		hook = action.hooks || action.name
-	}
-
-	var action = toAction(action)
-	if (!hook) throw new TypeError('all actions require dom event hooks')
-	action.hooks = typeof hook == 'string'
-		? [hook]
-		: hook
-	this.actions.push(action)
-	return action
 }
 
 function addBehaviour(trigger, action){
@@ -106,4 +86,12 @@ function addBehaviour(trigger, action){
 		action: action
 	})
 	return this
+}
+
+function installBehaviour(self, behaviour){
+	for (var i = 0, len = behaviour.length; i < len; i++) {
+		var b = behaviour[i]
+		if (typeof b.action == "object") b.action = graph(b.action)
+		self.events.on(b.trigger, b.action)
+	}
 }

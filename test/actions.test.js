@@ -49,16 +49,6 @@ describe('actions', function () {
 		})
 		
 		describe('with predefined actions', function () {
-			it('should work with hooks defined on the action', function () {
-				var dispatch = action(function(e){
-					this.dispatch('down')
-				}).on('down', spy)
-				dispatch.hooks = ['keydown']
-
-				car.action(dispatch)
-				runKeyDown(car)
-			})
-
 			it('should work with hooks defined at bind time', function () {
 				var dispatch = action(function(e){
 					this.dispatch('down')
@@ -75,8 +65,7 @@ describe('actions', function () {
 		beforeEach(function () {
 			Car = presenter('<div tabIndex="1" class="car"></div>')
 		})
-		afterEach(function () {
-		})
+
 		describe('with plain functions', function () {
 			it('with the hook defined in the functions name', function () {					
 				Car.action(function keydown(e){
@@ -96,16 +85,6 @@ describe('actions', function () {
 		})
 		
 		describe('with predefined actions', function () {
-			it('should work with hooks defined on the action', function () {
-				var dispatch = action(function(e){
-					this.dispatch('down')
-				}).on('down', spy)
-				dispatch.hooks = ['keydown']
-
-				Car.action(dispatch)
-				runKeyDown(new Car)
-			})
-
 			it('should work with hooks defined at bind time', function () {
 				var dispatch = action(function(e){
 					this.dispatch('down')
