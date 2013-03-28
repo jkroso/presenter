@@ -1,6 +1,7 @@
 
 var should = require('chai').should()
-	, Presenter = require('../src')
+  , presenter = require('../src')
+	, Presenter = presenter.Base
 	, DomEmitter = require('dom-emitter')
 
 var p
