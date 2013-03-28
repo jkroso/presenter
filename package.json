@@ -15,7 +15,9 @@
     "mocha": "*",
     "chai": "*",
     "bigfile": "~0.3.0",
-    "sourcegraph": "~0.5.0"
+    "sourcegraph": "~0.5.0",
+    "happen": "~0.1.2",
+    "chai-spies": "~0.5.1"
   },
   "repository": {
     "type": "git",
