@@ -57,21 +57,31 @@ Presenter.prototype.action = function(hook, act){
   
   if (typeof act == 'function') act = new Action(act)
   act.subject = this
-
+  if (typeof hook != 'object') hookError()
+  function dispatch(e){ act.send(e, this) }
+  
   if (hook instanceof Array) {
-    var dispatch = function(e){ act.send(e, this) }
-    each(hook, function(hook){
+    var k = hook.length
+    if (!k) hookError()
+    while (k--) {
       var fn = dispatch
-      if (typeof hook == 'function') fn = hook, hook = fn.name
-      this.events.on(hook, fn)
-    }, this)
+      var event = hook[k]
+      if (typeof event == 'function') fn = event, event = fn.name
+      this.events.on(event, fn)
+    }
   } else {
-    each(hook, function(fn, k){
-      this.events.on(k, fn)
-    }, this)
+    for (var k in hook) {
+      var fn = hook[k]
+      this.events.on(k, typeof fn == 'function' ? fn : dispatch)
+    }
   }
   
   return act
+  
+}
+
+function hookError(){
+  throw new TypeError('unable to determine a DOM event hook')
 }
 
 /**

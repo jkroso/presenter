@@ -88,6 +88,7 @@ function addAction(hook, action){
 	}
 
 	var action = toAction(action)
+	if (!hook) throw new TypeError('all actions require dom event hooks')
 	action.hooks = typeof hook == 'string'
 		? [hook]
 		: hook
