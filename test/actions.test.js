@@ -93,6 +93,20 @@ describe('actions', function () {
 				Car.action('keydown', dispatch)
 				runKeyDown(new Car)
 			})
+
+			it('should copy all attributes of the action when instantiated', function () {
+				var dispatch = action()
+				dispatch.myattr = {}
+				dispatch.myfn = function(){}
+				Car.action('keydown', dispatch)
+				var car = new Car
+				var copy = car.actions.keydown.out[0]
+				copy.should.deep.equal(dispatch)
+				// same identity for functions
+				copy.myfn.should.equal(dispatch.myfn)
+				// different identity same value for objects
+				copy.myattr.should.not.equal(dispatch.myattr)
+			})
 		})
 	})
 })

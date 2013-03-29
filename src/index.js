@@ -3,6 +3,7 @@ var Base = require('./base')
   , ChildList = require('./childlist')
   , Action = require('action').Action
   , graph = require('graph')
+  , clone = require('clone')
 
 module.exports = makePresenter
 makePresenter.ChildList = ChildList
@@ -68,15 +69,7 @@ function installActions(self, actions){
 	for (var hook in actions) {
 		var acts = actions[hook]
 		acts.forEach(function(action){
-			connectPins(self.action(hook, action.send), action.pins)
-		})
-	}
-}
-
-function connectPins(action, pins){
-	for (var pin in pins) {
-		pins[pin].forEach(function(child){
-			connectPins(action.connect(pin, child.send), child.pins)
+			self.action(hook, clone(action))
 		})
 	}
 }
