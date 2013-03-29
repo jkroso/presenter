@@ -42,14 +42,19 @@ function makePresenter(name, template){
 	)
 
 	Pres.behaviour = []
-	Pres.actions = {}
 	Pres.behave = addBehaviour
+	Pres.actions = {}
 	Pres.action = addAction
+	Pres.use = addPlugin
 
 	// inherit Base
 	Pres.prototype.__proto__ = Base.prototype
 
 	return Pres
+}
+
+function addPlugin(plugin){
+	return plugin(this)
 }
 
 function addAction(hook, action){
