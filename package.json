@@ -2,14 +2,14 @@
   "name": "presenter",
   "version": "0.1.0",
   "description": "A controller-ish class. Helps glue model to interface",
-  "main": "src/index.js",
   "dependencies": {
     "classes": "git://github.com/jkroso/classes",
     "domify": "git://github.com/jkroso/domify",
     "dom-emitter": "git://github.com/jkroso/dom-emitter",
     "graph": "git://github.com/jkroso/graph",
     "action": "git://github.com/jkroso/action",
-    "foreach": "https://github.com/manuelstofer/foreach/archive/a3e15b4cf59cea0873b684cfac433756865e39d7.tar.gz"
+    "foreach": "https://github.com/manuelstofer/foreach/archive/a3e15b4cf59cea0873b684cfac433756865e39d7.tar.gz",
+    "dev-component": "*"
   },
   "devDependencies": {
     "mocha": "*",

@@ -7,6 +7,7 @@ var DomEmitter = require('dom-emitter')
 	, domify = require('domify')
 	, matches = require('matches-selector')
 	, event = require('event')
+	, dev = require('dev')
 
 module.exports = Presenter
 
@@ -28,6 +29,7 @@ function Presenter(view){
 	this.classList = classlist(view)
 	this.events = new DomEmitter(view, this)
 	this.actions = {}
+	dev(view, this)
 }
 
 /**
