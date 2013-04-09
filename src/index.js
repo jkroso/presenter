@@ -7,7 +7,7 @@ var Base = require('./base')
 
 module.exports = makePresenter
 makePresenter.ChildList = ChildList
-makePresenter.Base = Base
+makePresenter.Base = makePresenter.Presenter = Base
 
 /**
  * Create a Presenter factory

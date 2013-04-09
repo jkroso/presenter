@@ -1,5 +1,5 @@
 EXPORT=require
-GRAPH = node_modules/.bin/sourcegraph.js src/index.js -p javascript,nodeish
+GRAPH = node_modules/.bin/sourcegraph.js src/index.js -p nodeish
 BIGFILE = node_modules/.bin/bigfile.js -p nodeish,javascript -x $(EXPORT)
 REPORTER=spec
 
@@ -17,7 +17,7 @@ clean:
 
 test/built.js: src/* test/*
 	@node_modules/.bin/sourcegraph.js test/browser.js \
-		-p mocha,nodeish,javascript \
+		-p mocha,nodeish \
 		| node_modules/.bin/bigfile.js \
 			-x null \
 			-p nodeish,javascript > $@

@@ -1,7 +1,8 @@
 
 var DomEmitter = require('dom-emitter')
 	, ChildList = require('./childlist')
-	, Action = require('action').Action
+	, action = require('action')
+	, Action = action.Action
 	, classlist = require('classes')
 	, domify = require('domify')
 	, matches = require('matches-selector')
@@ -46,23 +47,25 @@ function Presenter(view){
 
 Presenter.prototype.action = function(hook, act){
 	if (!act) act = hook, hook = act.name
-	if (typeof act == 'function') act = new Action(act)
-	var dispatch = this.actions[hook]
-	if (dispatch) dispatch.out = dispatch.out.concat(act)
+	var con = action.parseConnection(hook)
+	con.action = action.toAction(act)
+	var dispatch = this.actions[con.from]
+	if (dispatch) dispatch.out = dispatch.out.concat(con)
 	else {
 		var self = this
 		dispatch = function multi(e){
 			var out = multi.out
 			for (var i = 0, len = out.length; i < len; i++) {
-				out[i].send(e, self, this)
+				var con = out[i]
+				con.action[con.to](e, self, this)
 			}
 		}
-		dispatch.out = [act]
-		this.actions[hook] = dispatch
-		event.bind(this.view, hook, dispatch)
+		dispatch.out = [con]
+		this.actions[con.from] = dispatch
+		event.bind(this.view, con.from, dispatch)
 	}
 	
-	return act 
+	return con.action 
 }
 
 /**

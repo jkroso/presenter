@@ -1,7 +1,7 @@
 
 var chai = require('chai')
   , should = chai.should()
-  , happen = require('happen/src/happen.js')
+  , happen = require('happen/src/happen')
   , spies = require('chai-spies')
 	, presenter = require('../src')
 	, Presenter = presenter.Base
@@ -58,6 +58,16 @@ describe('actions', function () {
 				runKeyDown(car)
 			})
 		})
+
+		describe('with non-standard input pins', function () {
+			it('should work', function () {
+				var key = action({
+					keydown: spy
+				})
+				car.action('keydown=>keydown', key)
+				runKeyDown(car)
+			})
+		})
 	})
 	
 	describe('applied to classes', function () {
@@ -100,12 +110,22 @@ describe('actions', function () {
 				dispatch.myfn = function(){}
 				Car.action('keydown', dispatch)
 				var car = new Car
-				var copy = car.actions.keydown.out[0]
+				var copy = car.actions.keydown.out[0].action
 				copy.should.deep.equal(dispatch)
 				// same identity for functions
 				copy.myfn.should.equal(dispatch.myfn)
 				// different identity same value for objects
 				copy.myattr.should.not.equal(dispatch.myattr)
+			})
+		})
+
+		describe('with non-standard input pins', function () {
+			it('should work', function () {
+				var key = action({
+					keydown: spy
+				})
+				Car.action('keydown=>keydown', key)
+				runKeyDown(new Car)
 			})
 		})
 	})

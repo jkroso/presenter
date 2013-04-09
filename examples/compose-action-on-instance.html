@@ -30,8 +30,8 @@
     40: 'down'
   }
 
-  car.action(function keydown(e){
-      this.dispatch(arrows[e.which], this.subject)
+  car.action(function keydown(e, subject){
+      this.dispatch(arrows[e.which], subject)
     })
     .on(function down(subj){
       var el = subj.view
