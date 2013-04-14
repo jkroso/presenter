@@ -9,6 +9,8 @@ module.exports = makePresenter
 makePresenter.ChildList = ChildList
 makePresenter.Base = makePresenter.Presenter = Base
 
+var id = 1
+
 /**
  * Create a Presenter factory
  * 
@@ -25,7 +27,7 @@ makePresenter.Base = makePresenter.Presenter = Base
 function makePresenter(name, template){
 	if (arguments.length < 2) {
 		template = name
-		name = 'anonymous_presenter'
+		name = 'anon_' + (id++)
 	}
 
 	// compile constructor
@@ -38,8 +40,9 @@ function makePresenter(name, template){
 		) + '\n' +
 		'  installBehaviour(this, '+name+'.behaviour)\n' +
 		'  installActions(this, '+name+'.actions)\n' +
-		'  \'init\' in this && this.init.apply(this, arguments)\n' +
-		'})'
+		'  this.init && this.init.apply(this, arguments)\n' +
+		'})\n' +
+		'//@ sourceURL=/compiled/presenters/'+name
 	)
 
 	Pres.behaviour = []
