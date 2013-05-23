@@ -1,25 +1,17 @@
-EXPORT=require
-GRAPH = node_modules/.bin/sourcegraph.js src/index.js -p nodeish
-BIGFILE = node_modules/.bin/bigfile.js -p nodeish,javascript -x $(EXPORT)
-REPORTER=spec
+GRAPH=node_modules/.bin/sourcegraph.js -p nodeish,mocha
+COMPILE=node_modules/.bin/_bigfile -p nodeish
+REPORTER=dot
 
-all: test/built.js browser
+all: test/built.js
+	open test/index.html
 
-browser: dist/presenter.js
-
-dist/%.js: src/*
-	@mkdir -p dist
-	@$(GRAPH) | $(BIGFILE) > $@
+examples/presenter.js: src/* index.js
+	@$(GRAPH) index.js | $(COMPILE) -x require > $@
 
 clean:
-	@rm -rf dist
-	@rm -rf tests/built.js
+	@rm -f test/built.js
 
-test/built.js: src/* test/*
-	@node_modules/.bin/sourcegraph.js test/browser.js \
-		-p mocha,nodeish \
-		| node_modules/.bin/bigfile.js \
-			-x null \
-			-p nodeish,javascript > $@
+test/built.js: index.js src/* test/*
+	@$(GRAPH) test/browser.js | $(COMPILE) -x null > $@
 
-.PHONY: all clean
+.PHONY: all test clean

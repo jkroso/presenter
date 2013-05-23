@@ -5,3 +5,4 @@
 /dist
 *.sublime-project
 *.sublime-workspace
+examples/presenter.js
