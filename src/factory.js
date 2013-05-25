@@ -1,13 +1,11 @@
 
-var Base = require('./base')
+var Base = require('./presenter')
   , ChildList = require('./childlist')
   , Action = require('action').Action
   , graph = require('graph')
   , clone = require('clone')
 
 module.exports = makePresenter
-makePresenter.ChildList = ChildList
-makePresenter.Base = makePresenter.Presenter = Base
 
 var id = 1
 

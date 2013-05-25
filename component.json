@@ -12,16 +12,20 @@
     "mv*"
   ],
   "dependencies": {
-    "component/classes": "*",
-    "jkroso/domify": "*",
-    "jkroso/dom-emitter": "*",
-    "jkroso/graph": "*",
-    "jkroso/action": "*"
+    "component/event": "0.1.0",
+    "component/dev": "*",
+    "jkroso/classes": "1.1.1",
+    "jkroso/domify": "0.1.1",
+    "jkroso/dom-emitter": "0.5.5",
+    "jkroso/clone": "0.1.2",
+    "jkroso/matches-selector": "0.1.1",
+    "jkroso/graph": "0.1.1",
+    "jkroso/action": "0.1.0"
   },
-  "main": "src/index.js",
   "scripts": [
-    "src/index.js",
-    "src/base.js",
+    "index.js",
+    "src/factory.js",
+    "src/presenter.js",
     "src/childlist.js"
   ],
   "license": "MIT"

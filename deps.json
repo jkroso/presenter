@@ -1,9 +1,8 @@
 {
   "production": {
-    "classes": "http://github.com/component/classes/tarball/1.1.0",
+    "classes": "http://github.com/jkroso/classes/tarball/1.1.1",
     "dev": "http://github.com/component/dev/tarball/master",
     "action": "http://github.com/jkroso/action/tarball/0.1.0",
-    "forEach": "http://github.com/jkroso/forEach/tarball/0.5.1",
     "graph": "http://github.com/jkroso/graph/tarball/0.1.1",
     "dom-emitter": "http://github.com/jkroso/dom-emitter/tarball/0.5.5",
     "domify": "http://github.com/jkroso/domify/tarball/0.1.1",
