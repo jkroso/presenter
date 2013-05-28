@@ -67,10 +67,10 @@ function addAction(hook, action){
 }
 
 function installActions(self, actions){
+	actions = clone(actions)
 	for (var hook in actions) {
-		var acts = actions[hook]
-		acts.forEach(function(action){
-			self.action(hook, clone(action))
+		actions[hook].forEach(function(action){
+			self.action(hook, action)
 		})
 	}
 }

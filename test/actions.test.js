@@ -1,13 +1,9 @@
 
-var chai = require('chai')
-  , should = chai.should()
+var chai = require('./chai')
   , happen = require('happen/src/happen')
-  , spies = require('chai-spies')
-	, presenter = require('../src')
-	, Presenter = presenter.Base
-	, action = require('action')
-
-chai.use(spies)
+  , presenter = require('..')
+  , Presenter = presenter.Presenter
+  , action = require('action')
 
 describe('actions', function () {
 	var spy
@@ -116,6 +112,15 @@ describe('actions', function () {
 				copy.myfn.should.equal(dispatch.myfn)
 				// different identity same value for objects
 				copy.myattr.should.not.equal(dispatch.myattr)
+			})
+
+			it('should maintain identity across actions', function(){
+				var dispatch = action()
+				Car.action('keydown', dispatch)
+				Car.action('keyup', dispatch)
+				var car = new Car
+				car.actions.keydown.out[0].action
+					.should.equal(car.actions.keyup.out[0].action)
 			})
 		})
 

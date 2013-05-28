@@ -6,7 +6,7 @@
     "graph": "http://github.com/jkroso/graph/tarball/0.1.1",
     "dom-emitter": "http://github.com/jkroso/dom-emitter/tarball/0.5.5",
     "domify": "http://github.com/jkroso/domify/tarball/0.1.1",
-    "clone": "http://github.com/jkroso/clone/tarball/0.1.2",
+    "clone": "http://github.com/jkroso/clone/tarball/0.2.1",
     "matches-selector": "http://github.com/jkroso/matches-selector/tarball/0.1.1",
     "event": "http://github.com/component/event/tarball/0.1.0"
   }
