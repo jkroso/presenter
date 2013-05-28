@@ -71,6 +71,32 @@ Presenter.prototype.action = function(hook, act){
 }
 
 /**
+ * add an event listener
+ * 
+ * @param {String} trigger
+ * @param {Function} fn
+ * @return {this}
+ */
+
+Presenter.prototype.on = function(trigger, fn){
+	this.events.on(trigger, fn)
+	return this
+}
+
+/**
+ * remove an event listener
+ * 
+ * @param {String} trigger
+ * @param {Function} fn
+ * @return {this}
+ */
+
+Presenter.prototype.off = function(trigger, fn){
+	this.events.off(trigger, fn)
+	return this
+}
+
+/**
  * use a plugin
  *
  * @param {Function} plugin

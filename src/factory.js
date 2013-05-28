@@ -44,7 +44,7 @@ function makePresenter(name, template){
 	)
 
 	Pres.behaviour = []
-	Pres.behave = addBehaviour
+	Pres.on = addBehaviour
 	Pres.actions = {}
 	Pres.action = addAction
 	Pres.use = addPlugin
