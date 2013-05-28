@@ -28,20 +28,30 @@
 <script src="presenter.js"></script>
 <script>
   var presenter = require('/')
-  var Fish = presenter('<div class="fish"></div>')
-    .behave(function click(e){
-      var el = this.view
-      el.style.width = el.offsetWidth + 1 + 'px'
-      el.style.height = el.offsetHeight + 1 + 'px'
-      this.events.emit('mousemove', e)
-    })
-    .behave(function mousemove(e){
-      var el = this.view
-      el.style.top = e.clientY - el.offsetHeight / 2 + 'px'
-      el.style.left = e.clientX - el.offsetWidth / 2 + 'px'
-    })
+  var template = '<div class="fish"></div>'
 
-  document.body.appendChild(new Fish().view)
+  // create a class
+
+  var Fish = presenter('Fish', template)
+
+  // add listener to all instances of Fish
+  
+  Fish.on('click', function(e){
+    var el = this.view
+    el.style.width = el.offsetWidth + 1 + 'px'
+    el.style.height = el.offsetHeight + 1 + 'px'
+    this.events.emit('mousemove', e)
+  })
+
+  // add a listener to one instance
+  
+  var fish = new Fish().on('mousemove', function(e){
+    var el = this.view
+    el.style.top = e.clientY - el.offsetHeight / 2 + 'px'
+    el.style.left = e.clientX - el.offsetWidth / 2 + 'px'
+  })
+
+  document.body.appendChild(fish.view)
 </script>
 </body>
 </html>

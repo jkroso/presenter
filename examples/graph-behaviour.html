@@ -26,26 +26,25 @@
 		}.bind(this), 0)
 	}
 
-	Counter.behaviour.push({
-		trigger: 'keydown',
-		action: {
-			value: function(e){
-				var val = e.target.innerText
-				return parseFloat(val, 10) || 0
-			},
-			inc: function(value, e){
-				return value + (e.which == 38 ? 1 : -1)
-			},
-			bang: function(inc){
-				var str = ''
-				while (inc-- > 0) {
-					str += '!'
-				}
-				return str
-			},
-			display: function(inc, bang, e){
-				e.target.innerHTML = inc + bang
-			}
+	Counter.on('keydown', {
+		value: function(e){
+			var num = e.target.innerHTML.replace(/!/g, '')
+			var val = parseFloat(num, 10) || 0
+			if (e.which == 38) return val + 1
+			if (e.which == 40) return val - 1
+			return val
+		},
+		bang: function(value){
+			value = Math.abs(value)
+			var str = ''
+			while (value--) str += '!'
+			return str
+		},
+		display: function(value, bang, e){
+			var abs = Math.abs(value)
+			e.target.innerHTML = abs == value
+				? value + bang
+				: bang + value
 		}
 	})
 

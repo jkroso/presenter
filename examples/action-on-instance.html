@@ -1,6 +1,7 @@
 <!doctype html>
 <html>
 <head>
+  <title>action on instance</title>
 <style>
   body {
     padding: 60px;
@@ -20,9 +21,9 @@
 <body>
 <script src="presenter.js"></script>
 <script>
-  var presenter = require('/')
-  var Car = presenter('Car', '<div tabIndex="1" class="car"></div>')
-  
+  var Presenter = require('/').Presenter
+  var car = new Presenter('<div tabIndex="1" class="car"></div>')
+
   var arrows = {
     37: 'left',
     38: 'up',
@@ -30,27 +31,28 @@
     40: 'down'
   }
 
-  Car.action(function keydown(e, subject){
-      this.dispatch(arrows[e.which], subject)
-    })
-    .on(function down(subj){
+  function dispatch(e, subject){
+    this.dispatch(arrows[e.which], subject)
+  }
+
+  car.action('keydown', dispatch)
+    .on('down', function(subj){
       var el = subj.view
       el.style.top = el.offsetTop + 15 + 'px'
     })
-    .on(function up(subj){
+    .on('up', function(subj){
       var el = subj.view
       el.style.top = el.offsetTop - 15 + 'px'
     })
-    .on(function right(subj){
+    .on('right', function(subj){
       var el = subj.view
       el.style.left = el.offsetLeft + 15 + 'px'
     })
-    .on(function left(subj){
+    .on('left', function(subj){
       var el = subj.view
       el.style.left = el.offsetLeft - 15 + 'px'
     })
 
-  var car = new Car
   document.body.appendChild(car.view)
   car.view.focus()
 </script>

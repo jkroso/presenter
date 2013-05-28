@@ -1,6 +1,7 @@
 <!doctype html>
 <html>
 <head>
+  <title>action on class</title>
 <style>
   body {
     padding: 60px;
@@ -21,8 +22,8 @@
 <script src="presenter.js"></script>
 <script>
   var presenter = require('/')
-  var car = new presenter.Base('<div tabIndex="1" class="car"></div>')
-
+  var Car = presenter('Car', '<div tabIndex="1" class="car"></div>')
+  
   var arrows = {
     37: 'left',
     38: 'up',
@@ -30,26 +31,27 @@
     40: 'down'
   }
 
-  car.action(function keydown(e, subject){
+  Car.action('keydown', function(e, subject){
       this.dispatch(arrows[e.which], subject)
     })
-    .on(function down(subj){
+    .on('down', function(subj){
       var el = subj.view
       el.style.top = el.offsetTop + 15 + 'px'
     })
-    .on(function up(subj){
+    .on('up', function(subj){
       var el = subj.view
       el.style.top = el.offsetTop - 15 + 'px'
     })
-    .on(function right(subj){
+    .on('right', function(subj){
       var el = subj.view
       el.style.left = el.offsetLeft + 15 + 'px'
     })
-    .on(function left(subj){
+    .on('left', function(subj){
       var el = subj.view
       el.style.left = el.offsetLeft - 15 + 'px'
     })
 
+  var car = new Car
   document.body.appendChild(car.view)
   car.view.focus()
 </script>

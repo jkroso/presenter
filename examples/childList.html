@@ -35,6 +35,8 @@
 
     var ObjView = presenter('<div class="object"></div>')
 
+    // init() gets called at construction time
+
     ObjView.prototype.init = function(model){
       this.attrs = new ChildList(this.view, this)
       for (var prop in model) {
@@ -45,6 +47,8 @@
       }, this)
     }
 
+    // templates can also be functions
+    
     var Attr = presenter(function(prop){
       return '<div class="attr">'+prop+'</div>'
     })
