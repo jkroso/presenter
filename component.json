@@ -17,7 +17,7 @@
     "jkroso/classes": "1.1.1",
     "jkroso/domify": "0.1.1",
     "jkroso/dom-emitter": "0.5.5",
-    "jkroso/clone": "0.1.2",
+    "jkroso/clone": "0.2.1",
     "jkroso/matches-selector": "0.1.1",
     "jkroso/graph": "0.1.1",
     "jkroso/action": "0.1.0"
@@ -28,5 +28,12 @@
     "src/presenter.js",
     "src/childlist.js"
   ],
-  "license": "MIT"
+  "license": "MIT",
+  "development": {
+    "chaijs/chai": "1.6.0",
+    "chaijs/chai-spies": "0.5.1",
+    "tmcw/happen": "v0.1.2",
+    "visionmedia/mocha": "1.9.0",
+    "jkroso/serve": "1.2.2"
+  }
 }

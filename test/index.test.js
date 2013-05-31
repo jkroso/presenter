@@ -1,8 +1,8 @@
 
 var chai = require('./chai')
   , presenter = require('..')
-	, Presenter = presenter.Base
-	, DomEmitter = require('dom-emitter')
+  , Presenter = presenter.Base
+  , DomEmitter = require('dom-emitter')
 
 var p
 beforeEach(function () {
