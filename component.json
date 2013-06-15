@@ -12,16 +12,16 @@
     "mv*"
   ],
   "dependencies": {
-    "component/event": "0.1.0",
-    "component/dev": "*",
-    "jkroso/classes": "1.1.1",
-    "jkroso/domify": "0.1.1",
-    "jkroso/dom-emitter": "0.6.0",
-    "jkroso/clone": "0.2.1",
     "jkroso/matches-selector": "0.1.1",
-    "jkroso/graph": "0.1.1",
+    "jkroso/dom-emitter": "0.6.0",
+    "jkroso/classes": "1.1.1",
     "jkroso/action": "0.1.0",
-    "component/reactive": "0.12.3"
+    "jkroso/clone": "0.2.1",
+    "jkroso/graph": "0.1.1",
+    "component/reactive": "0.12.3",
+    "component/domify": "1.0.0",
+    "component/event": "0.1.0",
+    "component/dev": "*"
   },
   "scripts": [
     "index.js",
@@ -35,7 +35,7 @@
     "chaijs/chai-spies": "0.5.1",
     "tmcw/happen": "v0.1.2",
     "visionmedia/mocha": "1.11.0",
-    "jkroso/serve": "1.3.0",
+    "jkroso/serve": "1.3.1",
     "jkroso/emitter": "0.7.0"
   }
 }
