@@ -1,12 +1,12 @@
 
-var DomEmitter = require('dom-emitter')
+var matches = require('matches-selector')
+  , DomEmitter = require('dom-emitter')
 	, ChildList = require('./childlist')
-	, action = require('action')
-	, Action = action.Action
 	, classlist = require('classes')
 	, domify = require('domify')
-	, matches = require('matches-selector')
+	, action = require('action')
 	, event = require('event')
+	, Action = action.Action
 	, dev = require('dev')
 
 module.exports = Presenter
