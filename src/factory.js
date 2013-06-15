@@ -1,11 +1,10 @@
 
-var Base = require('./presenter')
-  , ChildList = require('./childlist')
+var ChildList = require('./childlist')
   , Action = require('action').Action
+  , reactive = require('reactive')
+  , Base = require('./presenter')
   , graph = require('graph')
   , clone = require('clone')
-
-module.exports = makePresenter
 
 var id = 1
 
@@ -22,7 +21,7 @@ var id = 1
  * @return {Function}
  */
 
-function makePresenter(name, template){
+module.exports = function(name, template){
 	if (arguments.length < 2) {
 		template = name
 		name = 'anon_' + (id++)
@@ -33,7 +32,8 @@ function makePresenter(name, template){
 		'(function '+name+'(model){\n' +
 		'  this.model = model\n' +
 		(typeof template == 'string' 
-			? '  Base.call(this, template)'
+			? '  Base.call(this, template)\n' +
+				'  reactive(this.view, model, this)'
 			: '  Base.call(this, template(model && model.toJSON ? model.toJSON() : model))'
 		) + '\n' +
 		'  installBehaviour(this, '+name+'.behaviour)\n' +
