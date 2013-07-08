@@ -1,12 +1,14 @@
 
 var chai = require('./chai')
-  , presenter = require('..')
-  , Presenter = presenter.Base
+  , present = require('..')
+  , Presenter = present.Class
   , DomEmitter = require('dom-emitter')
 
 var p
+var spy
 beforeEach(function () {
 	p = new Presenter('<div></div>')
+	spy = chai.spy()
 })
 
 describe('new Presenter', function () {
@@ -23,7 +25,28 @@ describe('new Presenter', function () {
 	it('should have a classList', function () {
 		p.should.have.property('classList')
 		p.classList.add.should.be.a('function')
-	})  
+	})
+
+	describe('init function', function(){
+		var Item
+		beforeEach(function(){
+			Item = present('<div></div>', spy)
+		})
+
+		it('should adopt the name of `init`', function(){
+			present('<div></div', function Item(){})
+				.should.have.property('name', 'Item')
+		})
+
+		it('should call init on instanciation', function(){
+			new Item(1,2)
+			spy.should.have.been.called.with.exactly(1,2)
+		})
+
+		it('should share prototypes', function(){
+			Item.prototype.should.equal(spy.prototype)
+		})
+	})
 })
 
 describe('insertion', function () {

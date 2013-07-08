@@ -18,7 +18,7 @@
     "jkroso/action": "0.1.0",
     "jkroso/clone": "0.2.1",
     "jkroso/graph": "0.1.1",
-    "component/reactive": "0.12.3",
+    "component/reactive": "0.13.0",
     "component/domify": "1.0.0",
     "component/event": "0.1.0",
     "component/dev": "*"
@@ -31,11 +31,11 @@
   ],
   "license": "MIT",
   "development": {
-    "chaijs/chai": "1.6.1",
+    "chaijs/chai": "1.7.2",
     "chaijs/chai-spies": "0.5.1",
     "tmcw/happen": "v0.1.2",
-    "visionmedia/mocha": "1.11.0",
-    "jkroso/serve": "1.3.1",
+    "visionmedia/mocha": "1.12.0",
+    "jkroso/serve": "1.4.2",
     "jkroso/emitter": "0.7.0"
   }
 }

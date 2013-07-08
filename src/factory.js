@@ -1,8 +1,8 @@
 
 var ChildList = require('./childlist')
+  , Presenter = require('./presenter')
   , Action = require('action').Action
   , reactive = require('reactive')
-  , Base = require('./presenter')
   , graph = require('graph')
   , clone = require('clone')
 
@@ -18,30 +18,43 @@ var id = 1
  *
  * @param {String} [name]
  * @param {Function|String} template
+ * @param {Function} init
  * @return {Function}
  */
 
-module.exports = function(name, template){
-	if (arguments.length < 2) {
-		template = name
-		name = 'anon_' + (id++)
+module.exports = function(template, init){
+	var name
+	if (!init) {
+		name = 'presenter_' + (id++)
+	} else if (typeof init == 'string') {
+		name = template
+		template = init
+	} else {
+		name = init.name || 'presenter_' + (id++)
 	}
 
 	// compile constructor
 	var Pres = eval(
 		'(function '+name+'(model){\n' +
-		'  this.model = model\n' +
+		'	this.model = model\n' +
 		(typeof template == 'string' 
-			? '  Base.call(this, template)\n' +
-				'  reactive(this.view, model, this)'
-			: '  Base.call(this, template(model && model.toJSON ? model.toJSON() : model))'
+			? '	Presenter.call(this, template)\n' +
+			  '	reactive(this.view, model, this)'
+			: '	Presenter.call(this, template(model && model.toJSON ? model.toJSON() : model))'
 		) + '\n' +
-		'  installBehaviour(this, '+name+'.behaviour)\n' +
-		'  installActions(this, '+name+'.actions)\n' +
-		'  this.init && this.init.apply(this, arguments)\n' +
+		'	installBehaviour(this, '+name+'.behaviour)\n' +
+		'	installActions(this, '+name+'.actions)\n' +
+		(typeof init == 'function'
+			? '	init.apply(this, arguments)\n'
+			: '	this.init && this.init.apply(this, arguments)\n') +
 		'})\n' +
 		'//@ sourceURL=/compiled/presenters/'+name
 	)
+
+	if (typeof init == 'function') {
+		Pres.prototype = init.prototype
+		Pres.prototype.constructor = Pres
+	}
 
 	Pres.behaviour = []
 	Pres.on = addBehaviour
@@ -49,8 +62,8 @@ module.exports = function(name, template){
 	Pres.action = addAction
 	Pres.use = addPlugin
 
-	// inherit Base
-	Pres.prototype.__proto__ = Base.prototype
+	// inherit Presenter
+	Pres.prototype.__proto__ = Presenter.prototype
 
 	return Pres
 }
