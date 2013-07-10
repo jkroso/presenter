@@ -40,7 +40,7 @@ module.exports = function(template, init){
 		(typeof template == 'string' 
 			? '	Presenter.call(this, template)\n' +
 			  '	reactive(this.view, model, this)'
-			: '	Presenter.call(this, template(model && model.toJSON ? model.toJSON() : model))'
+			: '	Presenter.call(this, template(model))'
 		) + '\n' +
 		'	installBehaviour(this, '+name+'.behaviour)\n' +
 		'	installActions(this, '+name+'.actions)\n' +
