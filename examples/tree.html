@@ -6,12 +6,6 @@
 		padding: 60px;
 		font: 14pt "Inconsolata", "sans-serif";
 	}
-	.object, .array {
-	}
-	ul {
-		padding-left: 5px;
-		margin: 0;
-	}
 	.entry > div {
 		display: inline-block;
 	}
@@ -51,20 +45,14 @@
 		]
 	}
 
-	var ObjectView = present('<div class=object></div>', function(obj){
-		for (var prop in obj) addEntry.call(this, obj[prop], prop)
+	var Composite = present('<div></div>', function(obj){
+		for (var key in obj) {
+			this.kids.append(new Entry({
+				key: key,
+				value: obj[key]
+			}))
+		}
 	})
-
-	var ArrayView = present('<ul class=array></ul>', function(arr){
-		arr.forEach(addEntry, this)
-	})
-
-	function addEntry(value, key){
-		this.kids.append(new Entry({
-			key: key,
-			value: value
-		}))
-	}
 
 	var template = '<div class=entry><div class=key>{key}: </div></div>'
 
@@ -73,12 +61,12 @@
 	})
 
 	var Value = present('<div class=value></div>', function(model){
-		if (typeof model != 'object') return this.view.innerHTML = model
-		this.classes.add('composite')
-		var child = model instanceof Array
-			? new ArrayView(model)
-			: new ObjectView(model)
-		this.view.appendChild(child.view)
+		if (typeof model == 'object'){
+			this.classes.add('composite')
+			this.view.appendChild(new Composite(model).view)
+		} else {
+			this.view.innerHTML = model
+		}
 	})
 
 	document.body.appendChild(new Value(data).view)
