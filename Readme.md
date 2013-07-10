@@ -4,15 +4,11 @@
 
 A controller-ish class. Helps glue model to interface.
 
-## Getting Started
+## Installation
 
-_With component_  
+_With [component](//github.com/component/component), [packin](//github.com/jkroso/packin) or [npm](//github.com/isaacs/npm)_  
 
-	$ component install jkroso/presenter
-
-_With npm_  
-
-	$ npm install jkroso/presenter --save
+	$ {package mananger} install jkroso/presenter
 
 then in your app:
 
@@ -29,13 +25,7 @@ Experimental: Expect the unexpected. Please provide feedback on api and your use
 ## Running the tests
 
 ```bash
-$ npm install
 $ make
 ```
-Then open your browser to the `./test` directory.
 
-_Note: these commands don't work on windows._ 
-
-## License 
-
-[MIT](License)
+Then open your browser to the [test](http://localhost:3000/test) directory.
