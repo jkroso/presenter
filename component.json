@@ -35,7 +35,7 @@
     "chaijs/chai-spies": "0.5.1",
     "tmcw/happen": "v0.1.2",
     "visionmedia/mocha": "1.12.0",
-    "jkroso/serve": "1.4.2",
+    "jkroso/serve": "1.4.3",
     "jkroso/emitter": "0.7.0"
   }
 }

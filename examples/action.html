@@ -1,0 +1,68 @@
+<!doctype html>
+<html>
+<head>
+	<title>action on instance</title>
+<style>
+	body {
+		padding: 60px;
+	}
+	.car {
+		width:50px;
+		height: 30px;
+		top:100px;
+		left:100px;
+		border-radius: 5px;
+		background: blue;
+		position: absolute;
+	}
+	.car:focus {
+		outline: none;
+		border: 1px solid orange;
+	}
+</style>
+</head>
+<body>
+<script>
+	var present = require('..')
+	var Presenter = present.Class
+	var Action = require('action')
+
+	var template = '<div tabIndex=1 class=car></div>'
+	var car = new Presenter(template)
+	var Car = present(template)
+
+	var arrows = {
+		37: 'left',
+		38: 'up',
+		39: 'right',
+		40: 'down'
+	}
+
+	var move = new Action(function(e, car){
+		this.dispatch(arrows[e.which], car)
+	}).on('down', offset(0, 15))
+		.on('left', offset(-15, 0))
+		.on('right', offset(15, 0))
+		.on('up', offset(0, -15))
+
+	function offset(x, y){
+		return function(car){
+			var el = car.view
+			el.style.top = el.offsetTop + y + 'px'
+			el.style.left = el.offsetLeft + x + 'px'
+		}
+	}
+	
+	// instances and Classes implement the same API
+	// so adding actions is exactly the same
+	car.action('keydown', move)
+	Car.action('keydown', move)
+
+	document.body.appendChild(car.view)
+	document.body.appendChild(new Car().view)
+	car.view.focus()
+	car.view.style.left = '300px'
+	car.view.style.background = 'red'
+</script>
+</body>
+</html>

@@ -1,0 +1,87 @@
+<!doctype html>
+<html>
+<head>
+<style>
+	body {
+		padding: 60px;
+		font: 14pt "Inconsolata", "sans-serif";
+	}
+	.object, .array {
+	}
+	ul {
+		padding-left: 5px;
+		margin: 0;
+	}
+	.entry > div {
+		display: inline-block;
+	}
+	.entry .key {
+		padding: 5px 0;
+		white-space: pre;
+	}
+	.value.composite {
+		display: block;
+		padding-left: 15px;
+		margin: 0;
+	}
+</style>
+</head>
+<body>
+<script>
+	var present = require('..')
+
+	var data = {
+		complete: true,
+		title: 'task',
+		kids: [
+			{
+				complete: false,
+				title: 'child-1',
+				kids:[
+					{
+						complete: false,
+						title: 'child-1\'s child'
+					}
+				]
+			},
+			{
+				complete: true,
+				title: 'child-2'
+			}
+		]
+	}
+
+	var ObjectView = present('<div class=object></div>', function(obj){
+		for (var prop in obj) addEntry.call(this, obj[prop], prop)
+	})
+
+	var ArrayView = present('<ul class=array></ul>', function(arr){
+		arr.forEach(addEntry, this)
+	})
+
+	function addEntry(value, key){
+		this.kids.append(new Entry({
+			key: key,
+			value: value
+		}))
+	}
+
+	var template = '<div class=entry><div class=key>{key}: </div></div>'
+
+	var Entry = present(template, function(model){
+		this.kids.append(new Value(model.value))
+	})
+
+	var Value = present('<div class=value></div>', function(model){
+		if (typeof model != 'object') return this.view.innerHTML = model
+		this.classes.add('composite')
+		var child = model instanceof Array
+			? new ArrayView(model)
+			: new ObjectView(model)
+		this.view.appendChild(child.view)
+	})
+
+	document.body.appendChild(new Value(data).view)
+</script>
+</body>
+</html>
