@@ -13,8 +13,8 @@ beforeEach(function () {
 
 describe('new Presenter', function () {
 	it('should convert a view string to DOM', function () {
-		p.view.should.be.an.instanceOf(Node)
-		p.view.tagName.should.equal('DIV')
+		p.el.should.be.an.instanceOf(Node)
+		p.el.tagName.should.equal('DIV')
 	})
 
 	it('should have an event emitter', function () {
@@ -65,16 +65,16 @@ describe('insertion', function () {
 			p.children.should.have.property('first', a)
 			p.children.should.have.property('last', child)
 			child.should.have.property('parent', p)
-			p.view.lastChild.should.equal(child.view)
+			p.el.lastChild.should.equal(child.el)
 			child.prevSibling.should.equal(b)
 		})
 
 		it('should insert within `children.el`', function () {
 			var child = new Presenter('<a></a>')
 			var p = new Presenter('<a><h1></h1></a>')
-			p.children.el = p.view.querySelector('h1')
+			p.children.el = p.el.querySelector('h1')
 			p.children.append(child)
-			p.children.el.lastChild.should.equal(child.view)
+			p.children.el.lastChild.should.equal(child.el)
 		})
 	})
 
@@ -85,16 +85,16 @@ describe('insertion', function () {
 			p.children.should.have.property('first', child)
 			p.children.should.have.property('last', b)
 			child.should.have.property('parent', p)
-			p.view.firstChild.should.equal(child.view)
+			p.el.firstChild.should.equal(child.el)
 			child.should.have.property('nextSibling', a)
 		})
 
 		it('should insert within `children.el`', function () {
 			var child = new Presenter('<a></a>')
 			var p = new Presenter('<a><h1></h1></a>')
-			p.children.el = p.view.querySelector('h1')
+			p.children.el = p.el.querySelector('h1')
 			p.children.prepend(child)
-			p.children.el.lastChild.should.equal(child.view)
+			p.children.el.lastChild.should.equal(child.el)
 		})
 	})
 
@@ -122,9 +122,9 @@ describe('insertion', function () {
 			})
 
 			it('should insert the Presenters `view` into the DOM', function () {
-				p.view.children[0].should.equal(a.view)
-				p.view.children[1].should.equal(child.view)
-				p.view.children[2].should.equal(b.view)
+				p.el.children[0].should.equal(a.el)
+				p.el.children[1].should.equal(child.el)
+				p.el.children[2].should.equal(b.el)
 			})
 		})
 	}
@@ -170,12 +170,12 @@ describe('.remove', function () {
 		b = new Presenter('<b></b>')
 		p.children.append(a)
 		a.children.append(b)
-		document.body.appendChild(p.view)
+		document.body.appendChild(p.el)
 	})
 
 	it('should take the presenters view out of the DOM', function () {
 		p.remove()
-		should.not.exist(p.view.parentNode)
+		should.not.exist(p.el.parentNode)
 	})
 
 	// TODO: is this necessary?

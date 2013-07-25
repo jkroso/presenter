@@ -11,7 +11,7 @@ var id = 1
 /**
  * Create a Presenter factory
  * 
- * If you pass a String as `view` it will be converted to 
+ * If you pass a String as `el` it will be converted to 
  * a DOM element. If you pass a function it will be called 
  * with `model.toJSON()` to produce a string which gets 
  * converted to a DOM element.
@@ -39,7 +39,7 @@ module.exports = function(template, init){
 		'	this.model = model\n' +
 		(typeof template == 'string' 
 			? '	Presenter.call(this, template)\n' +
-			  '	reactive(this.view, model, this)'
+			  '	reactive(this.el, model, this)'
 			: '	Presenter.call(this, template(model))'
 		) + '\n' +
 		'	installBehaviour(this, '+name+'.behaviour)\n' +

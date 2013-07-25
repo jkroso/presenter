@@ -13,11 +13,11 @@ describe('actions', function () {
 
 	// helper function
 	function runKeyDown(instance){
-		document.body.appendChild(instance.view)
-		instance.view.focus()
-		happen.keydown(instance.view)
+		document.body.appendChild(instance.el)
+		instance.el.focus()
+		happen.keydown(instance.el)
 		spy.should.have.been.called.once
-		document.body.removeChild(instance.view)
+		document.body.removeChild(instance.el)
 	}
 
 	describe('applied to instances', function () {

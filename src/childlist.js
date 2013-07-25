@@ -8,7 +8,7 @@ module.exports = ChildList
  * @param {Presenter} owner
  */
 
-function ChildList (el, owner) {
+function ChildList(el, owner){
 	this.el = el
   this.owner = owner
 }
@@ -32,7 +32,7 @@ ChildList.prototype.append = function (child) {
   this.last = child
   if (!this.first) this.first = child
 
-  this.el.appendChild(child.view)
+  this.el.appendChild(child.el)
   return this
 }
 
@@ -51,7 +51,7 @@ ChildList.prototype.prepend = function (child) {
   this.first = child
   if (!this.last) this.last = child
 
-  this.el.insertBefore(child.view, this.el.firstChild)
+  this.el.insertBefore(child.el, this.el.firstChild)
   return this
 }
 

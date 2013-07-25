@@ -14,22 +14,22 @@ module.exports = Presenter
 /**
  * Presenter
  * 
- * If `view` is a string it will 
+ * If `el` is a string it will 
  * be converted to a HTML DOM element
  *
- * @param {String|Element} view
+ * @param {String|Element} el
  */
 
-function Presenter(view){
-	if (typeof view == 'string') view = domify(view)
-	this.view = view
+function Presenter(el){
+	if (typeof el == 'string') el = domify(el)
+	this.el = el
 	this.kids =
-	this.children = new ChildList(view, this)
+	this.children = new ChildList(el, this)
 	this.classes = 
-	this.classList = classlist(view)
-	this.events = new DomEmitter(view, this)
+	this.classList = classlist(el)
+	this.events = new DomEmitter(el, this)
 	this.actions = {}
-	dev(view, this)
+	dev(el, this)
 }
 
 /**
@@ -64,7 +64,7 @@ Presenter.prototype.action = function(hook, act){
 		}
 		dispatch.out = [con]
 		this.actions[con.from] = dispatch
-		event.bind(this.view, con.from, dispatch)
+		event.bind(this.el, con.from, dispatch)
 	}
 	
 	return con.action 
@@ -121,7 +121,7 @@ Presenter.prototype.insertBefore = function(sib){
 	this.nextSibling = sib
 	this.prevSibling = prev
 
-	sib.view.parentNode.insertBefore(this.view, sib.view)
+	sib.el.parentNode.insertBefore(this.el, sib.el)
 }
 
 /**
@@ -139,7 +139,7 @@ Presenter.prototype.insertAfter = function(sib){
 	sib.nextSibling = this
 	this.prevSibling = sib
 
-	sib.view.parentNode.insertBefore(this.view, sib.view.nextSibling)
+	sib.el.parentNode.insertBefore(this.el, sib.el.nextSibling)
 }
 
 /**
@@ -160,24 +160,24 @@ Presenter.prototype.siblings = function(inc){
 	return sibs
 }
 
-function prevSibs (view) {
-	if (!view) return []
-	var prev = prevSibs(view.prevSibling)
-	prev.push(view)
+function prevSibs (el) {
+	if (!el) return []
+	var prev = prevSibs(el.prevSibling)
+	prev.push(el)
 	return prev
 }
 
 /**
- * Remove a view from the DOM
+ * Remove a el from the DOM
  * 
  * @emits "remove"
  */
  
 Presenter.prototype.remove = function(){
-	var parent = this.view.parentNode
+	var parent = this.el.parentNode
 	if (parent) {
 		this.events.emit('remove')
-		parent.removeChild(this.view)
+		parent.removeChild(this.el)
 	}
 }
 
@@ -191,7 +191,7 @@ Presenter.prototype.remove = function(){
 Presenter.prototype.up = function(sel){
 	var parent = this
 	while (parent = parent.parent) {
-		if (matches(parent.view, sel)) return parent
+		if (matches(parent.el, sel)) return parent
 	}
 }
 
@@ -207,7 +207,7 @@ Presenter.prototype.down = function(sel){
 	var childs = this.children.toArray()
 	for (var i = 0; i < childs.length; i++) {
 		var child = childs[i]
-		if (matches(child.view, sel)) return child
+		if (matches(child.el, sel)) return child
 		child.children.each(push)
 	}
 
@@ -227,7 +227,7 @@ Presenter.prototype.downLast = function(sel){
 	var childs = this.children.toArray().reverse()
 	for (var i = 0; i < childs.length; i++) {
 		var child = childs[i]
-		if (matches(child.view, sel)) return child
+		if (matches(child.el, sel)) return child
 		reversePush(child.children.last)
 	}
 
