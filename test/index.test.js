@@ -27,6 +27,10 @@ describe('new Presenter', function () {
 		p.classList.add.should.be.a('function')
 	})
 
+	it('should be able to use the main export', function(){
+		new present('<div></div>').el.tagName.should.equal('DIV')
+	})
+
 	describe('init function', function(){
 		var Item
 		beforeEach(function(){
