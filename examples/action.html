@@ -47,7 +47,7 @@
 
 	function offset(x, y){
 		return function(car){
-			var el = car.view
+			var el = car.el
 			el.style.top = el.offsetTop + y + 'px'
 			el.style.left = el.offsetLeft + x + 'px'
 		}
@@ -58,11 +58,11 @@
 	car.action('keydown', move)
 	Car.action('keydown', move)
 
-	document.body.appendChild(car.view)
-	document.body.appendChild(new Car().view)
-	car.view.focus()
-	car.view.style.left = '300px'
-	car.view.style.background = 'red'
+	document.body.appendChild(car.el)
+	document.body.appendChild(new Car().el)
+	car.el.focus()
+	car.el.style.left = '300px'
+	car.el.style.background = 'red'
 </script>
 </body>
 </html>

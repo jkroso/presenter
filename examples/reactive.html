@@ -26,13 +26,13 @@
     <div class="views">views: {views}</div>
   </article>
   <script>
-    var Presenter = require('..')
+    var present = require('..')
     var Emitter = require('emitter')
     var template = document.querySelector('article')
     template.parentNode.removeChild(template)
     template = template.outerHTML
 
-    var Article = Presenter('Article', template)
+    var Article = present('Article', template)
 
     var data = [
       {
@@ -54,7 +54,7 @@
 
     data.forEach(function(model){
       Emitter(model)
-      document.body.appendChild(new Article(model).view)
+      document.body.appendChild(new Article(model).el)
     })
 
     setInterval(function(){

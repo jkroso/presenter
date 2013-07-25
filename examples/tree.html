@@ -63,13 +63,13 @@
 	var Value = present('<div class=value></div>', function(model){
 		if (typeof model == 'object'){
 			this.classes.add('composite')
-			this.view.appendChild(new Composite(model).view)
+			this.el.appendChild(new Composite(model).el)
 		} else {
-			this.view.innerHTML = model
+			this.el.innerHTML = model
 		}
 	})
 
-	document.body.appendChild(new Value(data).view)
+	document.body.appendChild(new Value(data).el)
 </script>
 </body>
 </html>

@@ -25,7 +25,7 @@
 </head>
 <body>
 	<script>
-		var presenter = require('..')
+		var Presenter = require('..')
 		var items = [
 			{
 				title: "see how jQuery does remove()",
@@ -46,10 +46,10 @@
 		]
 
 		// Todo item container
-		var list = new presenter.Base('<div id="list"></div>')
+		var list = new Presenter('<div id="list"></div>')
 
 		// Item class
-		var Item = presenter(function(model){
+		var Item = Presenter(function(model){
 			return '<div class="item">'+model.title+'</div>'
 		})
 		
@@ -68,7 +68,7 @@
 			list.kids.append(new Item(model))
 		})
 
-		document.body.appendChild(list.view)
+		document.body.appendChild(list.el)
 	</script>
 </body>
 </html>

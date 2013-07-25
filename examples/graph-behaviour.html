@@ -16,14 +16,12 @@
 </head>
 <body>
 <script>
-	var presenter = require('..')
-	var Counter = presenter('<div tabIndex="1" class="counter">1</div>')
-
-	Counter.prototype.init = function(){
+	var present = require('..')
+	var Counter = present('<div tabIndex=1 class=counter>1</div>', function(){
 		setTimeout(function () {
-			this.view.focus()
+			this.el.focus()
 		}.bind(this), 0)
-	}
+	})
 
 	Counter.on('keydown', {
 		value: function(e){
@@ -47,7 +45,7 @@
 		}
 	})
 
-	document.body.appendChild(new Counter().view)
+	document.body.appendChild(new Counter().el)
 </script>
 </body>
 </html>
