@@ -37,11 +37,11 @@ module.exports = function(template, init){
 	var Pres = eval(
 		'(function '+name+'(model){\n' +
 		'	this.model = model\n' +
-		(typeof template == 'string' 
-			? '	Presenter.call(this, template)\n' +
-			  '	reactive(this.el, model, this)'
-			: '	Presenter.call(this, template(model))'
-		) + '\n' +
+		(typeof template == 'string'
+			? '	Presenter.call(this, template)\n'
+			: '	Presenter.call(this, template(model))\n'
+		) +
+		'	this.reactive = reactive(this.el, model, this)\n' +
 		'	installBehaviour(this, '+name+'.behaviour)\n' +
 		'	installActions(this, '+name+'.actions)\n' +
 		(typeof init == 'function'
