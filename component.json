@@ -20,7 +20,7 @@
     "jkroso/clone": "0.2.1",
     "jkroso/graph": "0.1.1",
     "component/domify": "1.0.0",
-    "component/event": "0.1.0",
+    "component/event": "0.1.1",
     "component/dev": "*"
   },
   "scripts": [
@@ -33,7 +33,7 @@
   "development": {
     "chaijs/chai": "1.7.2",
     "tmcw/happen": "v0.1.2",
-    "jkroso/serve": "1.4.8",
+    "jkroso/serve": "1.5.0",
     "jkroso/emitter": "0.7.0",
     "chaijs/chai-spies": "0.5.1",
     "visionmedia/mocha": "1.12.0"

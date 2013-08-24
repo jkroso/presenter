@@ -12,12 +12,10 @@
 
 			mocha.setup('bdd')
 
-			require('./index.test')
+			require('./presenter.test')
 			require('./actions.test')
 
-			mocha.run(function () {
-			   console.log('Done!')
-			})
+			mocha.run()
 		</script>
 	</body>
 </html>
