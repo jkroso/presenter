@@ -4,7 +4,7 @@ var chai = require('./chai')
   , Presenter = present.Class
   , DomEmitter = require('dom-emitter')
 
-var p
+var p = {}
 var spy
 beforeEach(function () {
 	p = new Presenter('<div></div>')
@@ -22,9 +22,9 @@ describe('new Presenter', function () {
 			.and.be.an.instanceOf(DomEmitter)
 	})
 
-	it('should have a classList', function () {
-		p.should.have.property('classList')
-		p.classList.add.should.be.a('function')
+	it('should have a `classes` property', function () {
+		p.should.have.property('classes')
+		p.classes.add.should.be.a('function')
 	})
 
 	it('should be able to use the main export', function(){
@@ -58,47 +58,47 @@ describe('insertion', function () {
 	beforeEach(function () {
 		a = new Presenter('<a></a>')
 		b = new Presenter('<b></b>')
-		p.children.append(a)
-		p.children.append(b)
+		p.kids.append(a)
+		p.kids.append(b)
 	})
 
-	describe('.children.append(<presenter>)', function () {
+	describe('.kids.append(<presenter>)', function () {
 		it('should insert as `lastChild` of `this`', function () {
 			var child = new Presenter('<a></a>')
-			p.children.append(child)
-			p.children.should.have.property('first', a)
-			p.children.should.have.property('last', child)
+			p.kids.append(child)
+			p.kids.should.have.property('first', a)
+			p.kids.should.have.property('last', child)
 			child.should.have.property('parent', p)
 			p.el.lastChild.should.equal(child.el)
 			child.prevSibling.should.equal(b)
 		})
 
-		it('should insert within `children.el`', function () {
+		it('should insert within `kids.el`', function () {
 			var child = new Presenter('<a></a>')
 			var p = new Presenter('<a><h1></h1></a>')
-			p.children.el = p.el.querySelector('h1')
-			p.children.append(child)
-			p.children.el.lastChild.should.equal(child.el)
+			p.kids.el = p.el.querySelector('h1')
+			p.kids.append(child)
+			p.kids.el.lastChild.should.equal(child.el)
 		})
 	})
 
-	describe('.children.prepend(<presenter>)', function () {
+	describe('.kids.prepend(<presenter>)', function () {
 		it('should insert as `firstChild` of `this`', function () {
 			var child = new Presenter('<a></a>')
-			p.children.prepend(child)
-			p.children.should.have.property('first', child)
-			p.children.should.have.property('last', b)
+			p.kids.prepend(child)
+			p.kids.should.have.property('first', child)
+			p.kids.should.have.property('last', b)
 			child.should.have.property('parent', p)
 			p.el.firstChild.should.equal(child.el)
 			child.should.have.property('nextSibling', a)
 		})
 
-		it('should insert within `children.el`', function () {
+		it('should insert within `kids.el`', function () {
 			var child = new Presenter('<a></a>')
 			var p = new Presenter('<a><h1></h1></a>')
-			p.children.el = p.el.querySelector('h1')
-			p.children.prepend(child)
-			p.children.el.lastChild.should.equal(child.el)
+			p.kids.el = p.el.querySelector('h1')
+			p.kids.prepend(child)
+			p.kids.el.lastChild.should.equal(child.el)
 		})
 	})
 
@@ -134,15 +134,17 @@ describe('insertion', function () {
 	}
 })
 
-describe('.children', function () {
-	it('should return a list of children', function () {
-		var a = new Presenter('<a></a>')
-		var b = new Presenter('<b></b>')
-		var c = new Presenter('<c></c>')
-		p.children.append(a)
-		p.children.append(b)
-		p.children.append(c)
-		p.children.toArray().should.deep.equal([a,b,c])
+describe('.kids', function(){
+	describe('toArray', function(){
+		it('should return a list of Elements', function(){
+			var a = new Presenter('<a></a>')
+			var b = new Presenter('<b></b>')
+			var c = new Presenter('<c></c>')
+			p.kids.append(a)
+			p.kids.append(b)
+			p.kids.append(c)
+			p.kids.toArray().should.deep.equal([a,b,c])
+		})
 	})
 })
 
@@ -152,9 +154,9 @@ describe('.siblings', function () {
 		a = new Presenter('<a></a>')
 		b = new Presenter('<b></b>')
 		c = new Presenter('<c></c>')
-		p.children.append(a)
-		p.children.append(b)
-		p.children.append(c)
+		p.kids.append(a)
+		p.kids.append(b)
+		p.kids.append(c)
 	})
 	it('should return a list of `this` presenters siblings', function () {
 		b.siblings().should.deep.equal([a,c])
@@ -172,8 +174,8 @@ describe('.remove', function () {
 	beforeEach(function () {
 		a = new Presenter('<a></a>')
 		b = new Presenter('<b></b>')
-		p.children.append(a)
-		a.children.append(b)
+		p.kids.append(a)
+		a.kids.append(b)
 		document.body.appendChild(p.el)
 	})
 

@@ -2,7 +2,7 @@
 var matches = require('matches-selector')
   , DomEmitter = require('dom-emitter')
 	, ChildList = require('./childlist')
-	, classlist = require('classes')
+	, classes = require('classes')
 	, domify = require('domify')
 	, action = require('action')
 	, event = require('event')
@@ -23,10 +23,8 @@ module.exports = Presenter
 function Presenter(el){
 	if (typeof el == 'string') el = domify(el)
 	this.el = el
-	this.kids =
-	this.children = new ChildList(el, this)
-	this.classes = 
-	this.classList = classlist(el)
+	this.kids = new ChildList(el, this)
+	this.classes = classes(el)
 	this.events = new DomEmitter(el, this)
 	this.actions = {}
 	dev(el, this)
@@ -204,11 +202,11 @@ Presenter.prototype.up = function(sel){
  */
 
 Presenter.prototype.down = function(sel){
-	var childs = this.children.toArray()
+	var childs = this.kids.toArray()
 	for (var i = 0; i < childs.length; i++) {
 		var child = childs[i]
 		if (matches(child.el, sel)) return child
-		child.children.each(push)
+		child.kids.each(push)
 	}
 
 	function push(child){
@@ -224,11 +222,11 @@ Presenter.prototype.down = function(sel){
  */
 
 Presenter.prototype.downLast = function(sel){
-	var childs = this.children.toArray().reverse()
+	var childs = this.kids.toArray().reverse()
 	for (var i = 0; i < childs.length; i++) {
 		var child = childs[i]
 		if (matches(child.el, sel)) return child
-		reversePush(child.children.last)
+		reversePush(child.kids.last)
 	}
 
 	function reversePush(child){
