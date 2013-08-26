@@ -17,6 +17,7 @@ exports = module.exports = function(){
 
 exports.prototype = View.prototype
 exports.Base =
-exports.Class = 
+exports.Class =
+exports.View =
 exports.Presenter = View
 exports.ChildList = ChildList
