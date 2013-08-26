@@ -35,6 +35,7 @@
     "tmcw/happen": "v0.1.2",
     "jkroso/serve": "1.5.0",
     "jkroso/emitter": "0.7.0",
+    "component/inherit": "0.0.2",
     "chaijs/chai-spies": "0.5.1",
     "visionmedia/mocha": "1.12.0"
   }

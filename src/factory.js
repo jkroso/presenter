@@ -1,8 +1,8 @@
 
 var ChildList = require('./childlist')
-  , Presenter = require('./presenter')
   , Action = require('action').Action
   , reactive = require('reactive')
+  , View = require('./presenter')
   , graph = require('graph')
   , clone = require('clone')
 
@@ -26,12 +26,12 @@ module.exports = function(template, init){
 	var name = (init && init.name) || 'view_' + (id++)
 
 	// compile constructor
-	var Pres = eval(
+	var Presenter = eval(
 		'(function '+name+'(model){\n' +
 		'	this.model = model\n' +
 		(typeof template == 'string'
-			? '	Presenter.call(this, template)\n'
-			: '	Presenter.call(this, template(model))\n'
+			? '	View.call(this, template)\n'
+			: '	View.call(this, template(model))\n'
 		) +
 		'	this.reactive = reactive(this.el, model, this)\n' +
 		'	installBehaviour(this, '+name+'.behaviour)\n' +
@@ -46,19 +46,21 @@ module.exports = function(template, init){
 
 	// share prototype
 	if (typeof init == 'function') {
-		Pres.prototype = init.prototype
-		Pres.prototype.constructor = Pres
+		Presenter.prototype = init.prototype
+		Presenter.prototype.constructor = Presenter
 	}
 
-	Pres.behaviour = []
-	Pres.on = addBehaviour
-	Pres.actions = {}
-	Pres.action = addAction
-	Pres.use = addPlugin
+	if (!(Presenter.prototype instanceof View)) {
+		Presenter.prototype.__proto__ = View.prototype
+	}
 
-	Pres.prototype.__proto__ = Presenter.prototype
+	Presenter.behaviour = []
+	Presenter.on = addBehaviour
+	Presenter.actions = {}
+	Presenter.action = addAction
+	Presenter.use = addPlugin
 
-	return Pres
+	return Presenter
 }
 
 function addPlugin(plugin){

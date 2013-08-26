@@ -1,13 +1,14 @@
 
+var DomEmitter = require('dom-emitter')
+var inherit = require('inherit')
 var chai = require('./chai')
-  , present = require('..')
-  , Presenter = present.Class
-  , DomEmitter = require('dom-emitter')
+var view = require('..')
+var View = view.View
 
 var p = {}
 var spy
 beforeEach(function () {
-	p = new Presenter('<div></div>')
+	p = new View('<div></div>')
 	spy = chai.spy()
 })
 
@@ -28,17 +29,17 @@ describe('new Presenter', function () {
 	})
 
 	it('should be able to use the main export', function(){
-		new present('<div></div>').el.tagName.should.equal('DIV')
+		new view('<div></div>').el.tagName.should.equal('DIV')
 	})
 
 	describe('init function', function(){
 		var Item
 		beforeEach(function(){
-			Item = present('<div></div>', spy)
+			Item = view('<div></div>', spy)
 		})
 
 		it('should adopt the name of `init`', function(){
-			present('<div></div', function Item(){})
+			view('<div></div', function Item(){})
 				.should.have.property('name', 'Item')
 		})
 
@@ -51,20 +52,31 @@ describe('new Presenter', function () {
 			Item.prototype.should.equal(spy.prototype)
 		})
 	})
+
+	describe('sub-classing', function(){
+		var A = view('<div></div>')
+		function B(){}
+		inherit(B, A)
+		var Sub = view('<p></p>', B)
+		it('should allow sub-classing', function(){
+			new Sub().should.be.an.instanceOf(B)
+			new Sub().should.be.an.instanceOf(A)
+		})
+	})
 })
 
 describe('insertion', function () {
 	var a, b
 	beforeEach(function () {
-		a = new Presenter('<a></a>')
-		b = new Presenter('<b></b>')
+		a = new View('<a></a>')
+		b = new View('<b></b>')
 		p.kids.append(a)
 		p.kids.append(b)
 	})
 
 	describe('.kids.append(<presenter>)', function () {
 		it('should insert as `lastChild` of `this`', function () {
-			var child = new Presenter('<a></a>')
+			var child = new View('<a></a>')
 			p.kids.append(child)
 			p.kids.should.have.property('first', a)
 			p.kids.should.have.property('last', child)
@@ -74,8 +86,8 @@ describe('insertion', function () {
 		})
 
 		it('should insert within `kids.el`', function () {
-			var child = new Presenter('<a></a>')
-			var p = new Presenter('<a><h1></h1></a>')
+			var child = new View('<a></a>')
+			var p = new View('<a><h1></h1></a>')
 			p.kids.el = p.el.querySelector('h1')
 			p.kids.append(child)
 			p.kids.el.lastChild.should.equal(child.el)
@@ -84,7 +96,7 @@ describe('insertion', function () {
 
 	describe('.kids.prepend(<presenter>)', function () {
 		it('should insert as `firstChild` of `this`', function () {
-			var child = new Presenter('<a></a>')
+			var child = new View('<a></a>')
 			p.kids.prepend(child)
 			p.kids.should.have.property('first', child)
 			p.kids.should.have.property('last', b)
@@ -94,8 +106,8 @@ describe('insertion', function () {
 		})
 
 		it('should insert within `kids.el`', function () {
-			var child = new Presenter('<a></a>')
-			var p = new Presenter('<a><h1></h1></a>')
+			var child = new View('<a></a>')
+			var p = new View('<a><h1></h1></a>')
 			p.kids.el = p.el.querySelector('h1')
 			p.kids.prepend(child)
 			p.kids.el.lastChild.should.equal(child.el)
@@ -109,7 +121,7 @@ describe('insertion', function () {
 		describe('.insert'+which+'(<presenter>)', function () {
 			var child
 			beforeEach(function () {
-				child = new Presenter('<i></i>')
+				child = new View('<i></i>')
 				if (which === 'Before') {
 					child.insertBefore(b)
 				} else {
@@ -137,9 +149,9 @@ describe('insertion', function () {
 describe('.kids', function(){
 	describe('toArray', function(){
 		it('should return a list of Elements', function(){
-			var a = new Presenter('<a></a>')
-			var b = new Presenter('<b></b>')
-			var c = new Presenter('<c></c>')
+			var a = new View('<a></a>')
+			var b = new View('<b></b>')
+			var c = new View('<c></c>')
 			p.kids.append(a)
 			p.kids.append(b)
 			p.kids.append(c)
@@ -151,9 +163,9 @@ describe('.kids', function(){
 describe('.siblings', function () {
 	var a,b,c
 	beforeEach(function () {
-		a = new Presenter('<a></a>')
-		b = new Presenter('<b></b>')
-		c = new Presenter('<c></c>')
+		a = new View('<a></a>')
+		b = new View('<b></b>')
+		c = new View('<c></c>')
 		p.kids.append(a)
 		p.kids.append(b)
 		p.kids.append(c)
@@ -172,8 +184,8 @@ describe('.siblings', function () {
 describe('.remove', function () {
 	var a,b
 	beforeEach(function () {
-		a = new Presenter('<a></a>')
-		b = new Presenter('<b></b>')
+		a = new View('<a></a>')
+		b = new View('<b></b>')
 		p.kids.append(a)
 		a.kids.append(b)
 		document.body.appendChild(p.el)
@@ -217,10 +229,10 @@ describe('.remove', function () {
 describe('navigation', function () {
 	var a1,a2,b1,b2
 	beforeEach(function () {
-		a1 = new Presenter('<a class="a"></a>')
-		a2 = new Presenter('<a class="a"></a>')
-		b1 = new Presenter('<b class="b"></b>')
-		b2 = new Presenter('<b class="b"></b>')
+		a1 = new View('<a class="a"></a>')
+		a2 = new View('<a class="a"></a>')
+		b1 = new View('<b class="b"></b>')
+		b2 = new View('<b class="b"></b>')
 		p.kids.append(a1)
 		p.kids.append(a2)
 		a1.kids.append(b1)
