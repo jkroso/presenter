@@ -23,15 +23,7 @@ var id = 1
  */
 
 module.exports = function(template, init){
-	var name
-	if (!init) {
-		name = 'presenter_' + (id++)
-	} else if (typeof init == 'string') {
-		name = template
-		template = init
-	} else {
-		name = init.name || 'presenter_' + (id++)
-	}
+	var name = (init && init.name) || 'view_' + (id++)
 
 	// compile constructor
 	var Pres = eval(
@@ -46,11 +38,13 @@ module.exports = function(template, init){
 		'	installActions(this, '+name+'.actions)\n' +
 		(typeof init == 'function'
 			? '	init.apply(this, arguments)\n'
-			: '	this.init && this.init.apply(this, arguments)\n') +
+			: ''
+		) +
 		'})\n' +
-		'//@ sourceURL=/compiled/presenters/'+name
+		'//@ sourceURL=/compiled/views/'+name
 	)
 
+	// share prototype
 	if (typeof init == 'function') {
 		Pres.prototype = init.prototype
 		Pres.prototype.constructor = Pres
@@ -62,7 +56,6 @@ module.exports = function(template, init){
 	Pres.action = addAction
 	Pres.use = addPlugin
 
-	// inherit Presenter
 	Pres.prototype.__proto__ = Presenter.prototype
 
 	return Pres

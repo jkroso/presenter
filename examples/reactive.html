@@ -1,68 +1,64 @@
-<!doctype html>
-<html>
-<head>
-  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-  <style>
-    body {
-      padding: 60px;
-    }
-    article {
-      padding: 15px;
-      max-width: 300px;
-      margin: 5px;
-      border:1px solid #ccc;
-      border-radius: 3px;
-    }
-    article div {
-      padding: 5px;
-    }
-  </style>
-</head>
-<body>
-  <h2>News feed</h2>
-  <article>
-    <h3 class="title">{title}</h3>
-    <div class="story">{description}</div>
-    <div class="views">views: {views}</div>
-  </article>
-  <script>
-    var present = require('..')
-    var Emitter = require('emitter')
-    var template = document.querySelector('article')
-    template.parentNode.removeChild(template)
-    template = template.outerHTML
+<title>news</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<style>
+	body {
+		padding: 60px;
+	}
+	article {
+		padding: 15px;
+		max-width: 300px;
+		margin: 5px;
+		border:1px solid #ccc;
+		border-radius: 3px;
+	}
+	article div {
+		padding: 5px;
+	}
+</style>
 
-    var Article = present('Article', template)
+<h2>News feed</h2>
+<article>
+	<h3 class="title">{title}</h3>
+	<div class="story">{description}</div>
+	<div class="views">views: {views}</div>
+</article>
 
-    var data = [
-      {
-        title: 'some eastern thing',
-        description: 'america just blew another $billion',
-        views: 1
-      },
-      {
-        title: 'some scandal',
-        description: "no way..?",
-        views: 100
-      },
-      {
-        title: 'some cute animal',
-        description: 'does something human-like',
-        views: 1000
-      }
-    ]
+<script>
+	var view = require('..')
+	var Emitter = require('emitter')
+	var template = document.querySelector('article')
+	template.parentNode.removeChild(template)
+	template = template.outerHTML
 
-    data.forEach(function(model){
-      Emitter(model)
-      document.body.appendChild(new Article(model).el)
-    })
+	var Article = view(template)
 
-    setInterval(function(){
-      data.forEach(function(model){
-        model.views = Math.ceil(model.views + Math.random() * model.views)
-        model.emit('change views')
-      })
-    }, 1000)
-  </script>
-</body>
-</html>
+	var data = [
+		{
+			title: 'some eastern thing',
+			description: 'america just blew another $billion',
+			views: 1
+		},
+		{
+			title: 'some scandal',
+			description: "no way..?",
+			views: 100
+		},
+		{
+			title: 'some cute animal',
+			description: 'does something human-like',
+			views: 1000
+		}
+	]
+
+	data.forEach(function(model){
+		Emitter(model)
+		document.body.appendChild(new Article(model).el)
+	})
+
+	setInterval(function(){
+		data.forEach(function(model){
+			model.views = Math.ceil(model.views + Math.random() * model.views)
+			model.emit('change views')
+		})
+	}, 1000)
+</script>

@@ -1,6 +1,3 @@
-<!doctype html>
-<html>
-<head>
 <style>
   body {
     padding: 60px;
@@ -23,34 +20,33 @@
     top:0px;
   }
 </style>
-</head>
+
 <body>
-<script>
-  var present = require('..')
-  var template = '<div class="fish"></div>'
+  <script>
+    var view = require('..')
+    var template = '<div class="fish"></div>'
 
-  // create a class
+    // create a class
 
-  var Fish = present('Fish', template)
+    var Fish = view(template)
 
-  // add listener to all instances of Fish
-  
-  Fish.on('click', function(e){
-    var el = this.el
-    el.style.width = el.offsetWidth + 1 + 'px'
-    el.style.height = el.offsetHeight + 1 + 'px'
-    this.events.emit('mousemove', e)
-  })
+    // add listener to all instances of Fish
+    
+    Fish.on('click', function(e){
+      var el = this.el
+      el.style.width = el.offsetWidth + 1 + 'px'
+      el.style.height = el.offsetHeight + 1 + 'px'
+      this.events.emit('mousemove', e)
+    })
 
-  // add a listener to one instance
-  
-  var fish = new Fish().on('mousemove', function(e){
-    var el = this.el
-    el.style.top = e.clientY - el.offsetHeight / 2 + 'px'
-    el.style.left = e.clientX - el.offsetWidth / 2 + 'px'
-  })
+    // add a listener to one instance
+    
+    var fish = new Fish().on('mousemove', function(e){
+      var el = this.el
+      el.style.top = e.clientY - el.offsetHeight / 2 + 'px'
+      el.style.left = e.clientX - el.offsetWidth / 2 + 'px'
+    })
 
-  document.body.appendChild(fish.el)
-</script>
+    document.body.appendChild(fish.el)
+  </script>
 </body>
-</html>

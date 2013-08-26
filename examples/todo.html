@@ -1,31 +1,28 @@
-<!doctype html>
-<html>
-<head>
-	<style>
-		body {
-			padding: 60px;
-		}
-		#list {
-			border:1px solid #ccc;
-			border-radius: 3px;
-			width: 300px;
-			margin: auto;
-		}
-		#list .item {
-			border-bottom: 1px solid #ccc;
-			padding: 10px;
-		}
-		#list .item.done {
-			text-decoration: line-through;
-		}
-		#list .item:last-of-type {
-			border-bottom: none;
-		}
-	</style>
-</head>
+<style>
+	body {
+		padding: 60px;
+	}
+	#list {
+		border:1px solid #ccc;
+		border-radius: 3px;
+		width: 300px;
+		margin: auto;
+	}
+	#list .item {
+		border-bottom: 1px solid #ccc;
+		padding: 10px;
+	}
+	#list .item.done {
+		text-decoration: line-through;
+	}
+	#list .item:last-of-type {
+		border-bottom: none;
+	}
+</style>
+
 <body>
 	<script>
-		var Presenter = require('..')
+		var View = require('..')
 		var items = [
 			{
 				title: "see how jQuery does remove()",
@@ -46,20 +43,20 @@
 		]
 
 		// Todo item container
-		var list = new Presenter('<div id="list"></div>')
+		var list = new View('<div id="list"></div>')
 
-		// Item class
-		var Item = Presenter(function(model){
+		// templates can be functions
+		function renderItem(model){
 			return '<div class="item">'+model.title+'</div>'
-		})
-		
-		Item.prototype.init = function(model){
-			this.events.on('click')
-			if (model.done) this.classList.add('done')
 		}
+		// Item class
+		var Item = View(renderItem, function Item(model){
+			this.events.on('click')
+			if (model.done) this.classes.add('done')
+		})
 
 		Item.prototype.onClick = function (e) {
-			this.classList.toggle('done')
+			this.classes.toggle('done')
 			this.model.done = !this.model.done
 		}
 
@@ -71,4 +68,3 @@
 		document.body.appendChild(list.el)
 	</script>
 </body>
-</html>
