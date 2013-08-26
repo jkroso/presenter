@@ -34,37 +34,33 @@ function Presenter(el){
  * hook an action to a DOM event. If you omit `hook`
  * `fn.name` will be used as the DOM event hook
  *
- *   pres.action(function click(domEvent, presenter){
- *     // this === Action
- *   })
- *   // equivalent to
- *   pres.action('click', function(e, subj){})
+ *   view.action('click', function(e, view){})
  *
- * @param {String} [hook]
+ * @param {String} hook
  * @param {Function|Action} act
  * @return {Action}
  */
 
 Presenter.prototype.action = function(hook, act){
-	if (!act) act = hook, hook = act.name
 	var con = action.parseConnection(hook)
 	con.action = action.toAction(act)
 	var dispatch = this.actions[con.from]
-	if (dispatch) dispatch.out = dispatch.out.concat(con)
-	else {
+
+	if (!dispatch) {
 		var self = this
-		dispatch = function multi(e){
-			var out = multi.out
+		dispatch = function(e){
+			var out = dispatch.out
 			for (var i = 0, len = out.length; i < len; i++) {
 				var con = out[i]
 				con.action[con.to](e, self, this)
 			}
 		}
-		dispatch.out = [con]
+		dispatch.out = []
 		this.actions[con.from] = dispatch
 		event.bind(this.el, con.from, dispatch)
 	}
-	
+
+	dispatch.out = dispatch.out.concat(con)
 	return con.action 
 }
 
