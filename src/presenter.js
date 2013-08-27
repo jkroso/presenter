@@ -24,11 +24,12 @@ function Presenter(el){
 	if (typeof el == 'string') el = domify(el)
 	this.el = el
 	this.kids = new ChildList(el, this)
-	this.classes = classes(el)
 	this.events = new DomEmitter(el, this)
 	this.actions = {}
 	dev(el, this)
 }
+
+classes(Presenter.prototype)
 
 /**
  * hook an action to a DOM event. If you omit `hook`

@@ -15,10 +15,10 @@
     "jkroso/matches-selector": "0.1.1",
     "jkroso/dom-emitter": "0.6.0",
     "jkroso/reactive": "0.13.1",
-    "jkroso/classes": "1.1.1",
     "jkroso/action": "0.1.0",
     "jkroso/clone": "0.2.1",
     "jkroso/graph": "0.1.1",
+    "ianstormtaylor/classes": "master",
     "component/domify": "1.0.0",
     "component/event": "0.1.1",
     "component/dev": "*"

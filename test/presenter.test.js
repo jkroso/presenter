@@ -23,10 +23,6 @@ describe('new Presenter', function () {
 			.and.be.an.instanceOf(DomEmitter)
 	})
 
-	it('should have a `classes` property', function () {
-		p.should.have.property('classes')
-		p.classes.add.should.be.a('function')
-	})
 
 	it('should be able to use the main export', function(){
 		new view('<div></div>').el.tagName.should.equal('DIV')
@@ -62,6 +58,13 @@ describe('new Presenter', function () {
 			new Sub().should.be.an.instanceOf(B)
 			new Sub().should.be.an.instanceOf(A)
 		})
+	})
+})
+
+describe('classes', function(){
+	it('should have class manipulation methods', function () {
+		p.addClass('test')
+		p.el.className.should.equal('test')
 	})
 })
 
