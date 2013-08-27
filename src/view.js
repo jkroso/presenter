@@ -9,7 +9,7 @@ var event = require('event')
 var Action = action.Action
 var dev = require('dev')
 
-module.exports = Presenter
+module.exports = View
 
 /**
  * Presenter
@@ -20,7 +20,7 @@ module.exports = Presenter
  * @param {String|Element} el
  */
 
-function Presenter(el){
+function View(el){
 	if (typeof el == 'string') el = domify(el)
 	this.el = el
 	this.kids = new ChildList(el, this)
@@ -33,7 +33,7 @@ function Presenter(el){
  * mixin class methods
  */
 
-classes(Presenter.prototype)
+classes(View.prototype)
 
 /**
  * hook an action to a DOM event. If you omit `hook`
@@ -46,7 +46,7 @@ classes(Presenter.prototype)
  * @return {Action}
  */
 
-Presenter.prototype.action = function(hook, act){
+View.prototype.action = function(hook, act){
 	var con = action.parseConnection(hook)
 	con.action = action.toAction(act)
 	var dispatch = this.actions[con.from]
@@ -77,7 +77,7 @@ Presenter.prototype.action = function(hook, act){
  * @return {this}
  */
 
-Presenter.prototype.on = function(trigger, fn){
+View.prototype.on = function(trigger, fn){
 	this.events.on(trigger, fn)
 	return this
 }
@@ -90,7 +90,7 @@ Presenter.prototype.on = function(trigger, fn){
  * @return {this}
  */
 
-Presenter.prototype.off = function(trigger, fn){
+View.prototype.off = function(trigger, fn){
 	this.events.off(trigger, fn)
 	return this
 }
@@ -102,7 +102,7 @@ Presenter.prototype.off = function(trigger, fn){
  * @return {Any} plugin.return
  */
 
-Presenter.prototype.use = function(plugin){
+View.prototype.use = function(plugin){
 	return plugin(this)
 }
 
@@ -112,7 +112,7 @@ Presenter.prototype.use = function(plugin){
  * @param {Presenter} sib
  */
 
-Presenter.prototype.insertBefore = function(sib){
+View.prototype.insertBefore = function(sib){
 	this.parent = sib.parent
 	var prev = sib.prevSibling
 	if (prev) prev.nextSibling = this
@@ -129,7 +129,7 @@ Presenter.prototype.insertBefore = function(sib){
  * @param {Presenter} sib
  */
 
-Presenter.prototype.insertAfter = function(sib){
+View.prototype.insertAfter = function(sib){
 	this.parent = sib.parent
 
 	var next = sib.nextSibling
@@ -148,7 +148,7 @@ Presenter.prototype.insertAfter = function(sib){
  * @return {Array}
  */
 
-Presenter.prototype.siblings = function(inc){
+View.prototype.siblings = function(inc){
 	var sibs = prevSibs(this.prevSibling)
 	inc && sibs.push(this)
 	var sib = this.nextSibling
@@ -172,7 +172,7 @@ function prevSibs (el) {
  * @emits "remove"
  */
  
-Presenter.prototype.remove = function(){
+View.prototype.remove = function(){
 	var parent = this.el.parentNode
 	if (parent) {
 		this.events.emit('remove')
@@ -187,7 +187,7 @@ Presenter.prototype.remove = function(){
  * @return {Presenter}
  */
 
-Presenter.prototype.up = function(sel){
+View.prototype.up = function(sel){
 	var parent = this
 	while (parent = parent.parent) {
 		if (matches(parent.el, sel)) return parent
@@ -202,7 +202,7 @@ Presenter.prototype.up = function(sel){
  * @return {Presenter}
  */
 
-Presenter.prototype.down = function(sel){
+View.prototype.down = function(sel){
 	var childs = this.kids.toArray()
 	for (var i = 0; i < childs.length; i++) {
 		var child = childs[i]
@@ -222,7 +222,7 @@ Presenter.prototype.down = function(sel){
  * @return {Presenter}
  */
 
-Presenter.prototype.downLast = function(sel){
+View.prototype.downLast = function(sel){
 	var childs = this.kids.toArray().reverse()
 	for (var i = 0; i < childs.length; i++) {
 		var child = childs[i]

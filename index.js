@@ -1,7 +1,7 @@
 
 var ChildList = require('./src/childlist')
 var makeView = require('./src/factory')
-var View = require('./src/presenter')
+var View = require('./src/view')
 
 /**
  * if used as a constuctor it creates an instance of the 

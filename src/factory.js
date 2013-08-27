@@ -2,7 +2,7 @@
 var ChildList = require('./childlist')
 var Action = require('action').Action
 var reactive = require('reactive')
-var View = require('./presenter')
+var View = require('./view')
 var graph = require('graph')
 var clone = require('clone')
 
