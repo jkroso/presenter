@@ -1,0 +1,46 @@
+<style>
+	body {
+		padding: 60px;
+	}
+	.fish {
+		width:50px;
+		height: 30px;
+		border-radius: 50%;
+		background: #bada33;
+		position: absolute;
+	}
+	.fish:before {
+		content: '';
+		border:15px solid #bada33;
+		border-top-color: transparent;
+		border-bottom-color: transparent;
+		border-left-color: transparent;
+		position: absolute;
+		right: -15px;
+		top:0px;
+	}
+</style>
+
+<div class="fish"></div>
+
+<script>
+	var view = require('..')
+	var template = document.querySelector('.fish')
+	document.body.removeChild(template)
+
+	var Fish = view(template.outerHTML)
+
+	Fish.prototype.on('click', function grow(e){
+		var el = this.el
+		el.style.width = el.offsetWidth + 1 + 'px'
+		el.style.height = el.offsetHeight + 1 + 'px'
+	})
+
+	Fish.prototype.on('mousemove', function swim(e){
+		var el = this.el
+		el.style.top = e.clientY - el.offsetHeight / 2 + 'px'
+		el.style.left = e.clientX - el.offsetWidth / 2 + 'px'
+	})
+
+	document.body.appendChild(new Fish().el)
+</script>

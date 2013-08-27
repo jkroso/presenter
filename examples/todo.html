@@ -20,51 +20,50 @@
 	}
 </style>
 
-<body>
-	<script>
-		var View = require('..')
-		var items = [
-			{
-				title: "see how jQuery does remove()",
-				done: true
-			},
-			{
-				title: "learn SVG",
-				done: false
-			},
-			{
-				title: "come up with a decent plugin system",
-				done: false
-			},
-			{
-				title: "build a better package manager",
-				done: true
-			}
-		]
+<div></div>
 
-		// Todo item container
-		var list = new View('<div id="list"></div>')
-
-		// templates can be functions
-		function renderItem(model){
-			return '<div class="item">'+model.title+'</div>'
+<script>
+	var View = require('..')
+	var items = [
+		{
+			title: "see how jQuery does remove()",
+			done: true
+		},
+		{
+			title: "learn SVG",
+			done: false
+		},
+		{
+			title: "come up with a decent plugin system",
+			done: false
+		},
+		{
+			title: "build a better package manager",
+			done: true
 		}
-		// Item class
-		var Item = View(renderItem, function Item(model){
-			this.events.on('click')
-			if (model.done) this.classes.add('done')
-		})
+	]
 
-		Item.prototype.onClick = function (e) {
-			this.classes.toggle('done')
-			this.model.done = !this.model.done
-		}
+	// Todo item container
+	var list = new View('<div id="list"></div>')
 
-		// insert items
-		items.forEach(function (model) {
-			list.kids.append(new Item(model))
-		})
+	// templates can be functions
+	function renderItem(model){
+		return '<div class="item">'+model.title+'</div>'
+	}
+	// Item class
+	var Item = View(renderItem, function Item(model){
+		if (model.done) this.addClass('done')
+	})
 
-		document.body.appendChild(list.el)
-	</script>
-</body>
+	Item.prototype.on('click', function(e){
+		this.toggleClass('done')
+		this.model.done = !this.model.done
+	})
+
+	// insert items
+	items.forEach(function(model){
+		list.kids.append(new Item(model))
+	})
+
+	document.body.appendChild(list.el)
+</script>

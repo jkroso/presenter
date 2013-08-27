@@ -1,6 +1,3 @@
-<!doctype html>
-<html>
-<head>
 <style>
 	body {
 		padding: 60px;
@@ -19,10 +16,11 @@
 		margin: 0;
 	}
 </style>
-</head>
-<body>
+
+<div></div>
+
 <script>
-	var present = require('..')
+	var view = require('..')
 
 	var data = {
 		complete: true,
@@ -45,7 +43,7 @@
 		]
 	}
 
-	var Composite = present('<div></div>', function(obj){
+	var Composite = view('<div></div>', function(obj){
 		for (var key in obj) {
 			this.kids.append(new Entry({
 				key: key,
@@ -56,13 +54,13 @@
 
 	var template = '<div class=entry><div class=key>{key}: </div></div>'
 
-	var Entry = present(template, function(model){
+	var Entry = view(template, function(model){
 		this.kids.append(new Value(model.value))
 	})
 
-	var Value = present('<div class=value></div>', function(model){
+	var Value = view('<div class=value></div>', function(model){
 		if (typeof model == 'object'){
-			this.classes.add('composite')
+			this.addClass('composite')
 			this.el.appendChild(new Composite(model).el)
 		} else {
 			this.el.innerHTML = model
@@ -71,5 +69,3 @@
 
 	document.body.appendChild(new Value(data).el)
 </script>
-</body>
-</html>
