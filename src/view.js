@@ -5,17 +5,15 @@ var emitter = require('dom-emitter')
 var classes = require('classes')
 var domify = require('domify')
 var action = require('action')
-var event = require('event')
+var own = {}.hasOwnProperty
 var Action = action.Action
 var dev = require('dev')
 
 module.exports = View
 
 /**
- * Presenter
- *
- * If `el` is a string it will
- * be converted to a HTML DOM element
+ * View base class. If `el` is a string it will
+ * be converted to a DOM element
  *
  * @param {String|Element} el
  */
@@ -23,10 +21,20 @@ module.exports = View
 function View(el){
 	if (typeof el == 'string') el = domify(el)
 	this.kids = new ChildList(el, this)
-	this.actions = {}
 	this.el = el
 	dev(el, this)
 }
+
+View.bindAction = bindAction
+
+/**
+ * actions to be bound at construction
+ *
+ * @type {Array}
+ * @api private
+ */
+
+View.prototype.actions = []
 
 /**
  * add mixins
@@ -49,24 +57,21 @@ emitter(View.prototype)
 View.prototype.action = function(hook, act){
 	var con = action.parseConnection(hook)
 	con.action = action.toAction(act)
-	var dispatch = this.actions[con.from]
-
-	if (!dispatch) {
-		var self = this
-		dispatch = function(e){
-			var out = dispatch.out
-			for (var i = 0, len = out.length; i < len; i++) {
-				var con = out[i]
-				con.action[con.to](e, self, this)
-			}
-		}
-		dispatch.out = []
-		this.actions[con.from] = dispatch
-		event.bind(this.el, con.from, dispatch)
+	if (!own.call(this, 'actions')) {
+		this.actions = this.actions.slice()
 	}
-
-	dispatch.out = dispatch.out.concat(con)
+	this.actions.push(con)
+	if (this.el) bindAction.call(this, con)
 	return con.action
+}
+
+function bindAction(connection){
+	var from = connection.from
+	var to = connection.to
+	var action = connection.action
+	this.on(from, function(e){
+		action[to](e, this)
+	})
 }
 
 /**

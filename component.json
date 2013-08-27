@@ -19,7 +19,6 @@
     "jkroso/clone": "0.2.1",
     "ianstormtaylor/classes": "master",
     "component/domify": "1.0.0",
-    "component/event": "0.1.1",
     "component/dev": "*"
   },
   "scripts": [

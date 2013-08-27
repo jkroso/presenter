@@ -1,10 +1,9 @@
 
-var ChildList = require('./childlist')
-var Action = require('action').Action
-var Emitter = require('dom-emitter')
+var bindEvents = require('dom-emitter').bindEvents
 var reactive = require('reactive')
-var View = require('./view')
 var clone = require('clone')
+var View = require('./view')
+var bindAction = View.bindAction
 
 var id = 1
 
@@ -34,8 +33,8 @@ module.exports = function(template, init){
 			: '	View.call(this, template(model))\n'
 		) +
 		'	this.reactive = reactive(this.el, model, this)\n' +
-		'	Emitter.bindEvents(this)\n' +
-		'	installActions(this, '+name+'.actions)\n' +
+		'	bindEvents(this)\n' +
+		'	bindActions(this)\n' +
 		(typeof init == 'function'
 			? '	init.apply(this, arguments)\n'
 			: ''
@@ -54,29 +53,16 @@ module.exports = function(template, init){
 		Presenter.prototype.__proto__ = View.prototype
 	}
 
-	Presenter.actions = {}
-	Presenter.action = addAction
-	Presenter.use = addPlugin
+	Presenter.use = use
 
 	return Presenter
 }
 
-function addPlugin(plugin){
+function use(plugin){
 	return plugin(this)
 }
 
-function addAction(hook, action){
-	if (!action) action = hook, hook = action.name
-	if (typeof action == 'function') action = new Action(action);
-	(this.actions[hook] || (this.actions[hook] = [])).push(action)
-	return action
-}
-
-function installActions(self, actions){
-	actions = clone(actions)
-	for (var hook in actions) {
-		actions[hook].forEach(function(action){
-			self.action(hook, action)
-		})
-	}
+function bindActions(self){
+	var actions = clone(self.actions)
+	actions.forEach(bindAction, self)
 }
