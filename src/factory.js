@@ -3,7 +3,6 @@ var ChildList = require('./childlist')
 var Action = require('action').Action
 var reactive = require('reactive')
 var View = require('./view')
-var graph = require('graph')
 var clone = require('clone')
 
 var id = 1
@@ -98,7 +97,6 @@ function addBehaviour(trigger, action){
 function installBehaviour(self, behaviour){
 	for (var i = 0, len = behaviour.length; i < len; i++) {
 		var b = behaviour[i]
-		if (typeof b.action == "object") b.action = graph(b.action)
 		self.events.on(b.trigger, b.action)
 	}
 }
