@@ -16,7 +16,7 @@ describe('actions', function(){
 		document.body.appendChild(instance.el)
 		instance.el.focus()
 		happen.keydown(instance.el)
-		spy.should.have.been.called.once
+		spy.should.have.been.called(1)
 		document.body.removeChild(instance.el)
 	}
 
@@ -63,7 +63,7 @@ describe('actions', function(){
 		})
 
 		it('with plain functions', function(){
-			Car.action('keydown', function(e){
+			Car.prototype.action('keydown', function(e){
 				this.dispatch('down')
 			}).on('down', spy)
 
@@ -76,40 +76,48 @@ describe('actions', function(){
 					this.dispatch('down')
 				}).on('down', spy)
 
-				Car.action('keydown', dispatch)
+				Car.prototype.action('keydown', dispatch)
 				runKeyDown(new Car)
 			})
 
 			it('should copy all attributes of the action when instantiated', function(){
-				var dispatch = action()
-				dispatch.myattr = {}
-				dispatch.myfn = function(){}
-				Car.action('keydown', dispatch)
-				var car = new Car
-				var copy = car.actions.keydown.out[0].action
-				copy.should.deep.equal(dispatch)
-				// same identity for functions
-				copy.myfn.should.equal(dispatch.myfn)
-				// different identity same value for objects
-				copy.myattr.should.not.equal(dispatch.myattr)
+				var dispatch = action({
+					myattr: {},
+					stdin: chai.spy(function(){
+						this.should.not.equal(dispatch)
+						this.should.deep.equal(dispatch)
+						this.stdin.should.equal(dispatch.stdin)
+						this.myattr.should.not.equal(dispatch.myattr)
+					})
+				})
+				Car.prototype.action('keydown', dispatch)
+				happen.keydown(new Car().el)
+				dispatch.stdin.should.have.been.called(1)
 			})
 
 			it('should maintain identity across actions', function(){
-				var dispatch = action()
-				Car.action('keydown', dispatch)
-				Car.action('keyup', dispatch)
+				var first
+				var dispatch = action({
+					stdin: chai.spy(function(){
+						this.should.not.equal(dispatch)
+						if (first) this.should.equal(first)
+						else first = this
+					})
+				})
+				Car.prototype.action('keydown', dispatch)
+				Car.prototype.action('keyup', dispatch)
 				var car = new Car
-				car.actions.keydown.out[0].action
-					.should.equal(car.actions.keyup.out[0].action)
+				happen.keydown(car.el)
+				happen.keyup(car.el)
+				dispatch.stdin.should.have.been.called(2)
 			})
 		})
 
-		describe('with non-standard input pins', function(){
+		describe('with custom input pins', function(){
 			it('should work', function(){
-				var key = action({
+				Car.prototype.action('keydown=>keydown', action({
 					keydown: spy
-				})
-				Car.action('keydown=>keydown', key)
+				}))
 				runKeyDown(new Car)
 			})
 		})
