@@ -13,7 +13,7 @@
   ],
   "dependencies": {
     "jkroso/matches-selector": "0.1.1",
-    "jkroso/dom-emitter": "0.6.0",
+    "jkroso/dom-emitter": "0.7.0",
     "jkroso/reactive": "0.13.1",
     "jkroso/action": "0.1.0",
     "jkroso/clone": "0.2.1",

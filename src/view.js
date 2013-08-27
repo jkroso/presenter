@@ -1,7 +1,7 @@
 
 var matches = require('matches-selector')
-var DomEmitter = require('dom-emitter')
 var ChildList = require('./childlist')
+var emitter = require('dom-emitter')
 var classes = require('classes')
 var domify = require('domify')
 var action = require('action')
@@ -13,8 +13,8 @@ module.exports = View
 
 /**
  * Presenter
- * 
- * If `el` is a string it will 
+ *
+ * If `el` is a string it will
  * be converted to a HTML DOM element
  *
  * @param {String|Element} el
@@ -22,18 +22,18 @@ module.exports = View
 
 function View(el){
 	if (typeof el == 'string') el = domify(el)
-	this.el = el
 	this.kids = new ChildList(el, this)
-	this.events = new DomEmitter(el, this)
 	this.actions = {}
+	this.el = el
 	dev(el, this)
 }
 
 /**
- * mixin class methods
+ * add mixins
  */
 
 classes(View.prototype)
+emitter(View.prototype)
 
 /**
  * hook an action to a DOM event. If you omit `hook`
@@ -66,33 +66,7 @@ View.prototype.action = function(hook, act){
 	}
 
 	dispatch.out = dispatch.out.concat(con)
-	return con.action 
-}
-
-/**
- * add an event listener
- * 
- * @param {String} trigger
- * @param {Function} fn
- * @return {this}
- */
-
-View.prototype.on = function(trigger, fn){
-	this.events.on(trigger, fn)
-	return this
-}
-
-/**
- * remove an event listener
- * 
- * @param {String} trigger
- * @param {Function} fn
- * @return {this}
- */
-
-View.prototype.off = function(trigger, fn){
-	this.events.off(trigger, fn)
-	return this
+	return con.action
 }
 
 /**
@@ -125,7 +99,7 @@ View.prototype.insertBefore = function(sib){
 
 /**
  * Insert `this` as the `nextSibling` of `sib`
- * 
+ *
  * @param {Presenter} sib
  */
 
@@ -168,15 +142,15 @@ function prevSibs (el) {
 
 /**
  * Remove a el from the DOM
- * 
+ *
  * @emits "remove"
  */
- 
+
 View.prototype.remove = function(){
 	var parent = this.el.parentNode
 	if (parent) {
-		this.events.emit('remove')
 		parent.removeChild(this.el)
+		this.emit('remove')
 	}
 }
 
