@@ -1,7 +1,5 @@
-<!doctype html>
-<html>
-<head>
-	<title>action on instance</title>
+<title>action on instance</title>
+
 <style>
 	body {
 		padding: 60px;
@@ -20,8 +18,9 @@
 		border: 1px solid orange;
 	}
 </style>
-</head>
-<body>
+
+<div></div>
+
 <script>
 	var present = require('..')
 	var Presenter = present.Class
@@ -52,11 +51,11 @@
 			el.style.left = el.offsetLeft + x + 'px'
 		}
 	}
-	
-	// instances and Classes implement the same API
-	// so adding actions is exactly the same
+
+	// actions can be inherited so just define
+	// them on the prototype of your classes
 	car.action('keydown', move)
-	Car.action('keydown', move)
+	Car.prototype.action('keydown', move)
 
 	document.body.appendChild(car.el)
 	document.body.appendChild(new Car().el)
@@ -64,5 +63,3 @@
 	car.el.style.left = '300px'
 	car.el.style.background = 'red'
 </script>
-</body>
-</html>
