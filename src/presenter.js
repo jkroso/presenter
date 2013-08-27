@@ -1,13 +1,13 @@
 
 var matches = require('matches-selector')
-  , DomEmitter = require('dom-emitter')
-	, ChildList = require('./childlist')
-	, classes = require('classes')
-	, domify = require('domify')
-	, action = require('action')
-	, event = require('event')
-	, Action = action.Action
-	, dev = require('dev')
+var DomEmitter = require('dom-emitter')
+var ChildList = require('./childlist')
+var classes = require('classes')
+var domify = require('domify')
+var action = require('action')
+var event = require('event')
+var Action = action.Action
+var dev = require('dev')
 
 module.exports = Presenter
 
@@ -28,6 +28,10 @@ function Presenter(el){
 	this.actions = {}
 	dev(el, this)
 }
+
+/**
+ * mixin class methods
+ */
 
 classes(Presenter.prototype)
 

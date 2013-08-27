@@ -1,10 +1,10 @@
 
 var ChildList = require('./childlist')
-  , Action = require('action').Action
-  , reactive = require('reactive')
-  , View = require('./presenter')
-  , graph = require('graph')
-  , clone = require('clone')
+var Action = require('action').Action
+var reactive = require('reactive')
+var View = require('./presenter')
+var graph = require('graph')
+var clone = require('clone')
 
 var id = 1
 
