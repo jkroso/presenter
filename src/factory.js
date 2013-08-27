@@ -1,6 +1,7 @@
 
 var ChildList = require('./childlist')
 var Action = require('action').Action
+var Emitter = require('dom-emitter')
 var reactive = require('reactive')
 var View = require('./view')
 var clone = require('clone')
@@ -33,7 +34,7 @@ module.exports = function(template, init){
 			: '	View.call(this, template(model))\n'
 		) +
 		'	this.reactive = reactive(this.el, model, this)\n' +
-		'	installBehaviour(this, '+name+'.behaviour)\n' +
+		'	Emitter.bindEvents(this)\n' +
 		'	installActions(this, '+name+'.actions)\n' +
 		(typeof init == 'function'
 			? '	init.apply(this, arguments)\n'
@@ -53,8 +54,6 @@ module.exports = function(template, init){
 		Presenter.prototype.__proto__ = View.prototype
 	}
 
-	Presenter.behaviour = []
-	Presenter.on = addBehaviour
 	Presenter.actions = {}
 	Presenter.action = addAction
 	Presenter.use = addPlugin
@@ -79,24 +78,5 @@ function installActions(self, actions){
 		actions[hook].forEach(function(action){
 			self.action(hook, action)
 		})
-	}
-}
-
-function addBehaviour(trigger, action){
-	if (typeof trigger == 'function') {
-		action = trigger
-		trigger = trigger.name
-	}
-	this.behaviour.push({
-		trigger: trigger,
-		action: action
-	})
-	return this
-}
-
-function installBehaviour(self, behaviour){
-	for (var i = 0, len = behaviour.length; i < len; i++) {
-		var b = behaviour[i]
-		self.events.on(b.trigger, b.action)
 	}
 }
