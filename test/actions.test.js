@@ -27,7 +27,7 @@ describe('actions', function(){
 		})
 
 		it('with plain functions', function(){
-			car.action('keydown', function(e){
+			car.when('keydown', function(e){
 				this.dispatch('down')
 			}).on('down', spy)
 
@@ -63,7 +63,7 @@ describe('actions', function(){
 		})
 
 		it('with plain functions', function(){
-			Car.prototype.action('keydown', function(e){
+			Car.prototype.when('keydown', function(e){
 				this.dispatch('down')
 			}).on('down', spy)
 

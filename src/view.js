@@ -47,14 +47,14 @@ emitter(View.prototype)
  * hook an action to a DOM event. If you omit `hook`
  * `fn.name` will be used as the DOM event hook
  *
- *   view.action('click', function(e, view){})
+ *   view.when('click', function(e, view){})
  *
  * @param {String} hook
  * @param {Function|Action} act
  * @return {Action}
  */
 
-View.prototype.action = function(hook, act){
+View.prototype.when = function(hook, act){
 	var con = action.parseConnection(hook)
 	con.action = action.toAction(act)
 	if (!own.call(this, 'actions')) {
@@ -72,6 +72,19 @@ function bindAction(connection){
 	this.on(from, function(e){
 		action[to](e, this)
 	})
+}
+
+/**
+ * chainable version of `.when()`
+ *
+ * @param {String} hook
+ * @param {Function|Action} act
+ * @return {this}
+ */
+
+View.prototype.action = function(hook, act){
+	this.when(hook, act)
+	return this
 }
 
 /**
