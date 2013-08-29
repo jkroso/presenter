@@ -74,7 +74,9 @@ function bindActions(){
 	actions.forEach(bindAction, this)
 }
 
-function bindEvents(){}
+function bindEvents(){
+	emitter.bindEvents(this)
+}
 
 function makeReactive(model){
 	this.reactive = reactive(this.el, model, this)

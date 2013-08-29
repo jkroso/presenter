@@ -67,6 +67,13 @@ describe('events', function(){
 		p.on('a', spy).emit('a')
 		spy.should.have.been.called(1)
 	})
+
+	it('should bind events at init time', function(){
+		p = view('<p></p>')
+		p.prototype.on('click', spy)
+		new p().emit('click')
+		spy.should.have.been.called(1)
+	})
 })
 
 describe('use()', function(){
