@@ -1,9 +1,11 @@
 
-var bindEvents = require('dom-emitter').bindEvents
+var emitter = require('dom-emitter')
 var reactive = require('reactive')
 var clone = require('clone')
 var View = require('./view')
+var Graph = require('graph')
 var bindAction = View.bindAction
+var own = {}.hasOwnProperty
 
 var id = 1
 
@@ -32,13 +34,10 @@ module.exports = function(template, init){
 			? '	View.call(this, template)\n'
 			: '	View.call(this, template(model))\n'
 		) +
-		'	this.reactive = reactive(this.el, model, this)\n' +
-		'	bindEvents(this)\n' +
-		'	bindActions(this)\n' +
-		(typeof init == 'function'
-			? '	init.apply(this, arguments)\n'
-			: ''
-		) +
+		'	var arr = this.init.toArray()\n' +
+		'	for (var i = 0, len = arr.length; i < len; i++) {\n' +
+		'		arr[i].apply(this, arguments)\n' +
+		'	}\n' +
 		'})\n' +
 		'//@ sourceURL=/compiled/views/'+name
 	)
@@ -53,16 +52,30 @@ module.exports = function(template, init){
 		Presenter.prototype.__proto__ = View.prototype
 	}
 
+	var fns = [makeReactive, bindEvents, bindActions]
+	if (typeof init == 'function') fns.push(init)
+	Presenter.prototype.init = new Graph(fns)
 	Presenter.use = use
 
 	return Presenter
 }
 
 function use(plugin){
+	if (!own.call(this.prototype, 'init')) {
+		this.prototype.init = this.prototype.init
+			? this.prototype.clone()
+			: new Graph
+	}
 	return plugin(this)
 }
 
-function bindActions(self){
-	var actions = clone(self.actions)
-	actions.forEach(bindAction, self)
+function bindActions(){
+	var actions = clone(this.actions)
+	actions.forEach(bindAction, this)
+}
+
+function bindEvents(){}
+
+function makeReactive(model){
+	this.reactive = reactive(this.el, model, this)
 }
