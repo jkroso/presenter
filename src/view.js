@@ -9,7 +9,8 @@ var own = {}.hasOwnProperty
 var Action = action.Action
 var dev = require('dev')
 
-module.exports = View
+module.exports = exports = View
+exports.bindAction = bindAction
 
 /**
  * View base class. If `el` is a string it will
@@ -24,8 +25,6 @@ function View(el){
 	this.el = el
 	dev(el, this)
 }
-
-View.bindAction = bindAction
 
 /**
  * actions to be bound at construction
