@@ -10,14 +10,14 @@ var own = {}.hasOwnProperty
 var id = 1
 
 /**
- * Create a Presenter factory
- * 
- * If you pass a String as `el` it will be converted to 
- * a DOM element. If you pass a function it will be called 
- * with `model.toJSON()` to produce a string which gets 
- * converted to a DOM element.
+ * Create a new View class. if `template` is a function it 
+ * will be passed `model` and can return either an Element
+ * or an HTML string.
  *
- * @param {String} [name]
+ *   var P = view('<p>{body}</p>')
+ *   new P({ body: 'some text' }).el
+ *   // <p>some text</p>
+ *
  * @param {Function|String} template
  * @param {Function} init
  * @return {Function}
