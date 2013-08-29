@@ -34,7 +34,7 @@ module.exports = function(template, init){
 			? '	View.call(this, template)\n'
 			: '	View.call(this, template(model))\n'
 		) +
-		'	var arr = this.init.toArray()\n' +
+		'	var arr = this.init.toArray().reverse()\n' +
 		'	for (var i = 0, len = arr.length; i < len; i++) {\n' +
 		'		arr[i].apply(this, arguments)\n' +
 		'	}\n' +
@@ -66,7 +66,7 @@ function use(plugin){
 			? this.prototype.clone()
 			: new Graph
 	}
-	return plugin(this)
+	return plugin.call(this, this)
 }
 
 function bindActions(){

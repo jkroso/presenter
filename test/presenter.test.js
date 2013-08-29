@@ -69,6 +69,53 @@ describe('events', function(){
 	})
 })
 
+describe('use()', function(){
+	beforeEach(function(){
+		p = view('<div></div>')
+	})
+	describe('init middleware', function(){
+		it('should allow middleware to be added', function(){
+			p.use(function(View){
+				View.prototype.init.addNode(spy)
+			})
+			new p(1)
+			spy.should.have.been.called(1).with(1)
+		})
+
+		it('should allow middleware to be sorted', function(){
+			var spyB = chai.spy(function(){
+				spy.should.not.have.been.called()
+			})
+			p.use(function(View){
+				View.prototype.init.addEdge(spy, spyB)
+			})
+			new p(2)
+			spyB.should.have.been.called(1).with(2)
+			spy.should.have.been.called.with(2)
+		})
+
+		it('should be safe with inheritance', function(){
+			p.use(function(View){
+				View.prototype.init.addNode(spy)
+			})
+			function B(){}
+			inherit(B, p)
+			B = view('<p></p>', B)
+			B.use(function(View){
+				this.spy = chai.spy()
+				View.prototype.init.addEdge(this.spy, spy)
+			})
+			new p(3)
+			spy.should.have.been.called(1)
+			B.spy.should.not.have.been.called()
+		})
+	})
+
+	describe('components', function(){
+		
+	})
+})
+
 describe('insertion', function(){
 	var a, b
 	beforeEach(function(){
