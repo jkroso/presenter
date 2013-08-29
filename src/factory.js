@@ -34,10 +34,9 @@ module.exports = function(template, init){
 			? '	View.call(this, template)\n'
 			: '	View.call(this, template(model))\n'
 		) +
-		'	var arr = this.init.toArray().reverse()\n' +
-		'	for (var i = 0, len = arr.length; i < len; i++) {\n' +
-		'		arr[i].apply(this, arguments)\n' +
-		'	}\n' +
+		'	var fns = this.init.toArray()\n' +
+		'	var i = fns.length\n' +
+		'	while (i--) fns[i].apply(this, arguments)\n' +
 		'})\n' +
 		'//@ sourceURL=/compiled/views/'+name
 	)
