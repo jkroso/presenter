@@ -1,6 +1,7 @@
 
 var ChildList = require('./src/childlist')
 var makeView = require('./src/factory')
+var Component = require('./component')
 var View = require('./src/view')
 
 /**
@@ -10,7 +11,7 @@ var View = require('./src/view')
  * @return {Function|View}
  */
 
-exports = module.exports = function(){
+module.exports = exports = function(){
 	if (this instanceof View) View.apply(this, arguments)
 	else return makeView.apply(null, arguments)
 }
@@ -21,3 +22,4 @@ exports.Class =
 exports.View =
 exports.Presenter = View
 exports.ChildList = ChildList
+exports.component = Component

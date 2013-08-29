@@ -1,5 +1,6 @@
 
 var DomEmitter = require('dom-emitter')
+var Component = require('../component')
 var inherit = require('inherit')
 var chai = require('./chai')
 var view = require('..')
@@ -119,7 +120,35 @@ describe('use()', function(){
 	})
 
 	describe('components', function(){
-		
+		it('should be able to need other components', function(){
+			var a = Component(chai.spy(function(){
+				spy.should.not.have.been.called()
+			}))
+			p.use(Component(spy).need(a))
+			new p()
+			spy.should.have.been.called(1)
+			a.init.should.have.been.called(1)
+		})
+
+		it('should handle nested needs', function(){
+			var a = Component(chai.spy(function(){
+				b.init.should.not.have.been.called()
+			}))
+			var b = Component(chai.spy(function(){
+				spy.should.not.have.been.called()
+			})).need(a)
+			p.use(Component(spy).need(b))
+			new p()
+			spy.should.have.been.called(1)
+			a.init.should.have.been.called(1)
+			b.init.should.have.been.called(1)
+		})
+
+		it('should mixin events', function(){
+			p.use(Component().on('click', spy))
+			new p().emit('click')
+			spy.should.have.been.called(1)
+		})
 	})
 })
 
@@ -186,7 +215,7 @@ describe('insertion', function(){
 					child.insertAfter(a)
 				}
 			})
-			
+
 			it('should insert as a sibling of `sib`', function(){
 				child.should.have.property('prevSibling', a)
 				child.should.have.property('nextSibling', b)
@@ -231,7 +260,7 @@ describe('.siblings', function(){
 	it('should return a list of `this` presenters siblings', function(){
 		b.siblings().should.deep.equal([a,c])
 	})
-	
+
 	describe('.siblings(true)', function(){
 		it('should include `this`', function(){
 			b.siblings(true).should.deep.equal([a,b,c])
@@ -266,8 +295,8 @@ describe('.remove', function(){
 	// TODO: is this necessary?
 	it.skip('should clear the event listeners of all children', function(){
 		var c = 0
-		function inc() { 
-			c++ 
+		function inc() {
+			c++
 		}
 		a.events.on('click', inc)
 		b.events.on('click', inc)
@@ -293,7 +322,7 @@ describe('navigation', function(){
 		a1.kids.append(b1)
 		a2.kids.append(b2)
 	})
-	
+
 	describe('.up(<string>)', function(){
 		it('should select by class', function(){
 			b1.up('.a').should.equal(a1)

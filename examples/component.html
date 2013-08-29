@@ -1,0 +1,62 @@
+<title>action on instance</title>
+
+<style>
+	body {
+		padding: 60px;
+	}
+	.car {
+		width:50px;
+		height: 30px;
+		top:100px;
+		left:100px;
+		border-radius: 5px;
+		background: blue;
+		position: absolute;
+	}
+	.car:focus {
+		outline: none;
+		border: 1px solid orange;
+	}
+</style>
+
+<div></div>
+
+<script>
+	var View = require('..')
+	var Component = require('../component')
+	var Action = require('action')
+
+	var controls = Component(function(){
+		this.controls = new Action(function(e, view){
+			this.dispatch({
+				37: 'left',
+				38: 'up',
+				39: 'right',
+				40: 'down'
+			}[e.which], view)
+		})
+		this.action('keydown', this.controls)
+	})
+
+	var moveable = Component(function(){
+		this.controls
+			.on('down', offset(0, 15))
+			.on('left', offset(-15, 0))
+			.on('right', offset(15, 0))
+			.on('up', offset(0, -15))
+	}).need(controls)
+
+	function offset(x, y){
+		return function(car){
+			var el = car.el
+			el.style.top = el.offsetTop + y + 'px'
+			el.style.left = el.offsetLeft + x + 'px'
+		}
+	}
+	var Car = View('<div tabIndex=1 class=car></div>')
+		.use(moveable)
+
+	var car = new Car
+	document.body.appendChild(car.el)
+	car.el.focus()
+</script>
