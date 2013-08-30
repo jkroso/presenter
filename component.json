@@ -2,7 +2,7 @@
   "name": "presenter",
   "repo": "jkroso/presenter",
   "description": "A controller-ish class. Helps glue model to interface",
-  "version": "0.1.0",
+  "version": "0.2.1",
   "keywords": [
     "mvc",
     "view",

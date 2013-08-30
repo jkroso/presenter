@@ -1,6 +1,6 @@
 {
   "name": "presenter",
-  "version": "0.1.0",
+  "version": "0.2.1",
   "description": "A controller-ish class. Helps glue model to interface",
   "dependencies": {},
   "devDependencies": {},
