@@ -1,9 +1,9 @@
 
 var emitter = require('dom-emitter')
 var reactive = require('reactive')
+var Graph = require('topograph')
 var clone = require('clone')
 var View = require('./view')
-var Graph = require('graph')
 var bindAction = View.bindAction
 var own = {}.hasOwnProperty
 
