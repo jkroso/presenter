@@ -1,11 +1,12 @@
 
 module.exports = function(fn){
 	function component(View){
-		var set = View.prototype.init
+		var graph = View.prototype.init
 		if (fn) {
-			set.addNode(fn)
+			graph.addNode(fn)
 			component.deps.forEach(function(dep){
-				set.addRelationship(fn, dep)
+				graph.addNode(dep)
+				graph.addRelationship(fn, dep)
 			})
 		}
 		component.events.forEach(function(event, i){
