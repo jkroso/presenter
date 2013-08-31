@@ -2,6 +2,7 @@
 var emitter = require('dom-emitter')
 var reactive = require('reactive')
 var Graph = require('topograph')
+var inherit = require('inherit')
 var clone = require('clone')
 var View = require('./view')
 var bindAction = View.bindAction
@@ -41,14 +42,11 @@ module.exports = function(template, init){
 		'//@ sourceURL=/compiled/views/'+name
 	)
 
-	// share prototype
 	if (typeof init == 'function') {
 		Presenter.prototype = init.prototype
 		Presenter.prototype.constructor = Presenter
-	}
-
-	if (!(Presenter.prototype instanceof View)) {
-		Presenter.prototype.__proto__ = View.prototype
+	} else {
+		inherit(Presenter, View)
 	}
 
 	var fns = [makeReactive, bindEvents, bindActions]
