@@ -59,8 +59,8 @@ View.prototype.when = function(hook, act){
 	if (!own.call(this, 'actions')) {
 		this.actions = this.actions.slice()
 	}
-	this.actions.push(con)
 	if (this.el) bindAction.call(this, con)
+	else this.actions.push(con)
 	return con.action
 }
 
